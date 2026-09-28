@@ -24,6 +24,8 @@
  */
 package com.oveduumnakal.betterblackjacking;
 
+import com.oveduumnakal.betterblackjacking.dev.PreviewRecorderPlugin;
+
 import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
@@ -32,7 +34,7 @@ public class BetterBlackjackingPluginTest
 {
 	public static void main(String[] args) throws Exception
 	{
-		ExternalPluginManager.loadBuiltin(BetterBlackjackingPlugin.class);
+		ExternalPluginManager.loadBuiltin(BetterBlackjackingPlugin.class, PreviewRecorderPlugin.class);
 		RuneLite.main(args);
 	}
 }
