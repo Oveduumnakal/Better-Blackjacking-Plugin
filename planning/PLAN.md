@@ -35,7 +35,7 @@ every task refers back to.
    the target wakes, instead of it snapping from lying down to standing (§5.5). The choice of
    animation is pending the user's review of the GIFs in `planning/wake-animation-previews/`.
 6. Repository, CI, style checks, changelog and docs to **Stockpile-Plugin standards** (§7).
-7. Logo (§7.6). The banner is TBD and out of scope for v1.0.
+7. Logo and banner (§7.6).
 
 ### Out of scope / non-goals
 
@@ -43,7 +43,6 @@ every task refers back to.
   overlay plugin only, per Jagex's third-party client guidelines.
 - No network access.
 - No support for NPCs outside Pollnivneach.
-- No banner image (TBD by the user).
 
 ---
 
@@ -300,11 +299,11 @@ Better-Blackjacking-Plugin/
 ├── build.gradle, settings.gradle (rootProject.name = 'better-blackjacking')
 ├── gradle/wrapper (Gradle 8.10, pinned SHA), gradlew, gradlew.bat
 ├── icon.png                        # 48×48 (Plugin Hub limit)
-├── icons/source/icon.svg           # logo source
+├── icons/source/icon-source.png    # full-size logo artwork (transparent)
 ├── javadoc-tools/                  # copy unchanged
 ├── runelite-plugin.properties      # displayName=Better Blackjacking, author=Oveduumnakal, version=1.0, build=standard
 ├── scripts/check-style.py          # copy; replace the StockpileColors note in the docstring with BetterBlackjackingColors
-├── scripts/gen-icon.sh             # renders icons/source/icon.svg → icon.png + resources copy
+├── scripts/gen-icon.py             # crops and downsamples icon-source.png → icon.png + resources copy
 ├── planning/                       # this plan's fixtures and previews; delete before release
 └── src/
     ├── main/java/com/oveduumnakal/betterblackjacking/...
@@ -352,12 +351,11 @@ writes the entry.
 
 ### 7.6 Logo
 
-`icons/source/icon.svg` shows two playing cards fanned slightly, a blackjack weapon (a short
-wooden club with a darker grip) laid sideways across both cards, and the letters **BB** readable
-on the front card. It must still read clearly at 48×48, so use thick shapes, no fine detail and
-at most 5 colours. Render it to `icon.png` (48×48) and to the resources copy. `rsvg-convert`
-isn't installed on the user's machine; the script falls back to Python `cairosvg` or asks the
-user to install librsvg. The banner is TBD, so the README uses a placeholder comment.
+**Done (#29).** The logo is the user's generated artwork: two playing cards, "BB" in red on the
+front card, and a wooden blackjack with a dark grip across them. The full-size source is
+`icons/source/icon-source.png`; `python scripts/gen-icon.py` crops and downsamples it to the 48×48
+`icon.png` and its resources copy. The banner is the user's generated artwork too, saved as
+`banner.png` (1200×675) and shown at the top of the README.
 
 ---
 
@@ -468,7 +466,7 @@ Owns `TileScale.java` and `SubTickClock.java`.
 Done when unit tests cover clamping and sub-tick interpolation to within 1 ms.
 
 **T6 Logo** (wave 1)
-Owns `icons/source/icon.svg`, `scripts/gen-icon.sh`, `icon.png` and the resources `icon.png`.
+Owns `icons/source/`, `scripts/gen-icon.py`, `icon.png` and the resources `icon.png`. (Superseded by #29.)
 Done when the 48×48 PNG passes a visual check. The orchestrator sends it to the user with
 `SendUserFile`. It may merge before the user replies; if they ask for changes, the orchestrator
 opens a follow-up task.

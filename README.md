@@ -1,5 +1,5 @@
 <p align="center">
-  <!-- Banner: TBD. Add banner.png here once it exists. -->
+  <img src="banner.png" alt="Better Blackjacking banner: a thief with a blackjack pickpocketing a knocked-out bandit in a desert town">
 </p>
 <h1 align="center">Better Blackjacking</h1>
 
