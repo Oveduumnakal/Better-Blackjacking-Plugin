@@ -505,9 +505,8 @@ Behind the `debugLogging` config, it logs lines tagged `[BetterBlackjacking]` wi
 calls it. It takes the config and a tick supplier, and has no event subscriptions of its own.
 
 **T12 Wake animation** (wave 3)
-Owns `WakeAnimationController.java`. Implements §5.5, including two-animation sequences (the
-second starts when the first's frame lengths have elapsed, counted in client ticks). It ships
-with every candidate as an option and defaults to Off until decision 1 in §10 is made.
+Owns `WakeAnimationController.java`. Implements §5.5: plays Max get up (7122) on the tracked target
+when it wakes; OFF does nothing. **Done (#33).**
 Done when a test verifies the animation is replaced only for the tracked target and only within
 the wake window. The user reviews it in-game.
 
@@ -540,7 +539,7 @@ Writes the changelog entry `1.0`. The Plugin Hub submission is a human gate.
 |---|---|
 | Thug messages differ from the bandit's | Regex with the NPC noun as a capture group; T14 confirms |
 | The knock-out target isn't the interacting NPC (e.g. with several bandits around) | Cross-check with the `Zzzzzz` overhead; fall back to the nearest eligible NPC that said it |
-| A Plugin Hub reviewer objects to setting NPC animations | It's cosmetic and off by default; say so in the PR to the Plugin Hub |
+| A Plugin Hub reviewer objects to setting NPC animations | It's cosmetic, only on the player's own screen, and can be turned off (Wake-up animation: Off); say so in the PR to the Plugin Hub |
 | RuneLite saves defaults into profiles | Rename the key whenever a default changes (§6) |
 | Sub-agents conflict on shared files | Exclusive ownership and orchestrator-only hotspots (§8.1) |
 
