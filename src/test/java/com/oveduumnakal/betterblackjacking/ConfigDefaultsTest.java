@@ -74,7 +74,7 @@ public class ConfigDefaultsTest
 	{
 		assertEquals(TimerStyle.PIE, config.timerStyle());
 		assertTrue(config.pickpocketPips());
-		assertEquals(WakeAnimation.OFF, config.wakeAnimation());
+		assertEquals(WakeAnimation.MAX_GET_UP, config.wakeAnimation());
 	}
 
 	@Test

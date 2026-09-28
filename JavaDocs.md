@@ -30,6 +30,7 @@
 - [com.oveduumnakal.betterblackjacking.TimerOverlay](#comoveduumnakalbetterblackjackingtimeroverlay)
 - [com.oveduumnakal.betterblackjacking.TimerStyle](#comoveduumnakalbetterblackjackingtimerstyle)
 - [com.oveduumnakal.betterblackjacking.WakeAnimation](#comoveduumnakalbetterblackjackingwakeanimation)
+- [com.oveduumnakal.betterblackjacking.WakeAnimationController](#comoveduumnakalbetterblackjackingwakeanimationcontroller)
 
 ---
 
@@ -556,7 +557,7 @@ How the countdown to the next knock-out is drawn.
 
 The get-up animation the target plays, on this player's screen only, when it wakes.
 
-- **Returns:** the wake-up animation (default `WakeAnimation#OFF`)
+- **Returns:** the wake-up animation (default `WakeAnimation#MAX_GET_UP`)
 
 #### wakingColor
 
@@ -599,6 +600,7 @@ tick every event is credited to is `Client#getTickCount()`.
 | `private PickpocketIndicatorOverlay` | `pickpocketIndicatorOverlay` |  |
 | `private PluginStateView` | `state` |  |
 | `private TimerOverlay` | `timerOverlay` |  |
+| `private WakeAnimationController` | `wakeAnimationController` |  |
 | `private int` | `wakeNpcIndex` |  |
 | `private int` | `wakeTick` |  |
 
@@ -685,6 +687,10 @@ counts as it waking (PLAN §5.5).
 #### timerOverlay
 
 `private TimerOverlay timerOverlay`
+
+#### wakeAnimationController
+
+`private WakeAnimationController wakeAnimationController`
 
 #### wakeNpcIndex
 
@@ -830,8 +836,8 @@ Updates the gate's boosted Thieving level.
 `void onTargetWoke(NPC npc)`
 
 Called once when the last knocked-out target plays `HUMAN_READY` (the game snapping it to
-standing) within `#WAKE_WINDOW_TICKS` ticks of its wake tick. The wake-up animation
-(PLAN §5.5) replaces the animation here. It does nothing yet.
+standing) within `#WAKE_WINDOW_TICKS` ticks of its wake tick. It replaces that animation with
+the configured wake-up animation (PLAN §5.5) through `WakeAnimationController`.
 
 - **Parameter** `npc` — the target that woke
 
@@ -3450,68 +3456,46 @@ _enum_
 The get-up animation played on the knocked-out target when it wakes, in place of the game's snap
 from lying down to standing (`AnimationID#HUMAN_READY`).
 
-<p>Each option carries the animation IDs to play in order; a two-animation option plays the second
-once the first has finished. The animation is cosmetic and only shows on this player's screen. The
-lengths in each option's Javadoc were measured in the cache viewer.
+<p>The animation replaces `HUMAN_READY` on the tick the target wakes; it isn't started early.
+It is cosmetic and only shows on this player's screen. The user chose `#MAX_GET_UP` on
+2026-09-27 (PLAN §10, decision 1) after reviewing the other candidates.
 
 ### Enum Constant Summary
 
 | Enum Constant | Description |
 |---|---|
-| `CYRISUS_SIT_UP` | Cyrisus's sit up, 1.2 s: unconscious to sitting, then a snap to standing. |
-| `CYRISUS_SIT_UP_THEN_STAND` | Cyrisus's sit up followed by his stand up, 3.2 s. |
-| `CYRISUS_STAND_UP` | Cyrisus's stand up, 2.0 s: crouching to standing. |
-| `MAX_GET_UP` | Max's get up, 1.6 s. |
+| `MAX_GET_UP` | Max's get up, 1.6 s (measured in the cache viewer). |
 | `OFF` | No replacement: the game's own snap to standing. |
-| `SITUPS_GET_UP` | Situps get up, 0.5 s. |
-| `SIT_UP_SHORT` | Sit-up short, 1.9 s. |
-| `SIT_UP_THEN_GET_UP` | A sit-up followed by the situps get-up, 1.1 s. |
 
 ### Field Summary
 
 | Modifier and Type | Field | Description |
 |---|---|---|
-| `private final int[]` | `animationIds` |  |
+| `public static final int` | `NO_ANIMATION` | The `#animationId()` of `#OFF`: no animation to play. |
+| `private final int` | `animationId` |  |
 | `private final String` | `label` |  |
 
 ### Constructor Summary
 
 | Constructor | Description |
 |---|---|
-| `WakeAnimation(String label, int... animationIds)` |  |
+| `WakeAnimation(String label)` |  |
+| `WakeAnimation(String label, int animationId)` |  |
 
 ### Method Summary
 
 | Modifier and Type | Method | Description |
 |---|---|---|
-| `public int[]` | `animationIds()` | Returns the animation IDs to play, in order. |
+| `public int` | `animationId()` | Returns the animation ID to play when the target wakes. |
 | `public String` | `toString()` | Returns the display name shown in the config panel. |
 
 ### Enum Constant Detail
-
-#### CYRISUS_SIT_UP
-
-`CYRISUS_SIT_UP`
-
-Cyrisus's sit up, 1.2 s: unconscious to sitting, then a snap to standing.
-
-#### CYRISUS_SIT_UP_THEN_STAND
-
-`CYRISUS_SIT_UP_THEN_STAND`
-
-Cyrisus's sit up followed by his stand up, 3.2 s.
-
-#### CYRISUS_STAND_UP
-
-`CYRISUS_STAND_UP`
-
-Cyrisus's stand up, 2.0 s: crouching to standing.
 
 #### MAX_GET_UP
 
 `MAX_GET_UP`
 
-Max's get up, 1.6 s.
+Max's get up, 1.6 s (measured in the cache viewer).
 
 #### OFF
 
@@ -3519,29 +3503,17 @@ Max's get up, 1.6 s.
 
 No replacement: the game's own snap to standing.
 
-#### SITUPS_GET_UP
-
-`SITUPS_GET_UP`
-
-Situps get up, 0.5 s.
-
-#### SIT_UP_SHORT
-
-`SIT_UP_SHORT`
-
-Sit-up short, 1.9 s.
-
-#### SIT_UP_THEN_GET_UP
-
-`SIT_UP_THEN_GET_UP`
-
-A sit-up followed by the situps get-up, 1.1 s.
-
 ### Field Detail
 
-#### animationIds
+#### NO_ANIMATION
 
-`private final int[] animationIds`
+`public static final int NO_ANIMATION`
+
+The `#animationId()` of `#OFF`: no animation to play.
+
+#### animationId
+
+`private final int animationId`
 
 #### label
 
@@ -3551,17 +3523,21 @@ A sit-up followed by the situps get-up, 1.1 s.
 
 #### WakeAnimation
 
-`WakeAnimation(String label, int... animationIds)`
+`WakeAnimation(String label)`
+
+#### WakeAnimation
+
+`WakeAnimation(String label, int animationId)`
 
 ### Method Detail
 
-#### animationIds
+#### animationId
 
-`public int[] animationIds()`
+`public int animationId()`
 
-Returns the animation IDs to play, in order. The array is a copy, so callers may keep or change it.
+Returns the animation ID to play when the target wakes.
 
-- **Returns:** the animation IDs in play order; empty for `#OFF`
+- **Returns:** the animation ID; `#NO_ANIMATION` for `#OFF`
 
 #### toString
 
@@ -3570,3 +3546,64 @@ Returns the animation IDs to play, in order. The array is a copy, so callers may
 Returns the display name shown in the config panel.
 
 - **Returns:** the display name
+
+---
+
+## com.oveduumnakal.betterblackjacking.WakeAnimationController
+
+_class_
+
+`class WakeAnimationController`
+
+Plays the configured `WakeAnimation` on a target that has just woken (PLAN §5.5).
+
+<p>The plugin calls `#play(NPC)` from its `AnimationChanged` handler when the target
+snaps to standing (`HUMAN_READY`) at its wake tick; the chosen get-up animation replaces that
+snap from its first frame. It is cosmetic and only shows on this player's screen. Setting the
+animation fires another `AnimationChanged`, but the plugin only reacts to `HUMAN_READY`,
+so this doesn't recurse.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final BetterBlackjackingConfig` | `config` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `WakeAnimationController(BetterBlackjackingConfig config)` | Creates a controller that reads the chosen animation from the config each time it plays. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `void` | `play(NPC npc)` | Plays the configured wake-up animation on the NPC from its first frame, or does nothing when the option is `WakeAnimation#OFF`. |
+
+### Field Detail
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+### Constructor Detail
+
+#### WakeAnimationController
+
+`WakeAnimationController(BetterBlackjackingConfig config)`
+
+Creates a controller that reads the chosen animation from the config each time it plays.
+
+- **Parameter** `config` — the plugin config
+
+### Method Detail
+
+#### play
+
+`void play(NPC npc)`
+
+Plays the configured wake-up animation on the NPC from its first frame, or does nothing when
+the option is `WakeAnimation#OFF`.
+
+- **Parameter** `npc` — the target that woke

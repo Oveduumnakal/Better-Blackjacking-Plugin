@@ -24,59 +24,49 @@
  */
 package com.oveduumnakal.betterblackjacking;
 
-import net.runelite.api.gameval.AnimationID;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import net.runelite.api.NPC;
 
 /**
- * The get-up animation played on the knocked-out target when it wakes, in place of the game's snap
- * from lying down to standing ({@link AnimationID#HUMAN_READY}).
+ * Plays the configured {@link WakeAnimation} on a target that has just woken (PLAN §5.5).
  *
- * <p>The animation replaces {@code HUMAN_READY} on the tick the target wakes; it isn't started early.
- * It is cosmetic and only shows on this player's screen. The user chose {@link #MAX_GET_UP} on
- * 2026-09-27 (PLAN §10, decision 1) after reviewing the other candidates.
+ * <p>The plugin calls {@link #play(NPC)} from its {@code AnimationChanged} handler when the target
+ * snaps to standing ({@code HUMAN_READY}) at its wake tick; the chosen get-up animation replaces that
+ * snap from its first frame. It is cosmetic and only shows on this player's screen. Setting the
+ * animation fires another {@code AnimationChanged}, but the plugin only reacts to {@code HUMAN_READY},
+ * so this doesn't recurse.
  */
-public enum WakeAnimation
+@Singleton
+class WakeAnimationController
 {
-	/** No replacement: the game's own snap to standing. */
-	OFF("Off"),
-	/** Max's get up, 1.6 s (measured in the cache viewer). */
-	MAX_GET_UP("Max get up", AnimationID.MAX_GET_UP);
+	private final BetterBlackjackingConfig config;
 
-	/** The {@link #animationId()} of {@link #OFF}: no animation to play. */
-	public static final int NO_ANIMATION = -1;
-
-	private final String label;
-
-	private final int animationId;
-
-	WakeAnimation(String label)
+	/**
+	 * Creates a controller that reads the chosen animation from the config each time it plays.
+	 *
+	 * @param config the plugin config
+	 */
+	@Inject
+	WakeAnimationController(BetterBlackjackingConfig config)
 	{
-		this(label, NO_ANIMATION);
-	}
-
-	WakeAnimation(String label, int animationId)
-	{
-		this.label = label;
-		this.animationId = animationId;
+		this.config = config;
 	}
 
 	/**
-	 * Returns the animation ID to play when the target wakes.
+	 * Plays the configured wake-up animation on the NPC from its first frame, or does nothing when
+	 * the option is {@link WakeAnimation#OFF}.
 	 *
-	 * @return the animation ID; {@link #NO_ANIMATION} for {@link #OFF}
+	 * @param npc the target that woke
 	 */
-	public int animationId()
+	void play(NPC npc)
 	{
-		return animationId;
-	}
+		WakeAnimation animation = config.wakeAnimation();
+		if (npc == null || animation == null || animation.animationId() == WakeAnimation.NO_ANIMATION)
+			return;
 
-	/**
-	 * Returns the display name shown in the config panel.
-	 *
-	 * @return the display name
-	 */
-	@Override
-	public String toString()
-	{
-		return label;
+		npc.setAnimation(animation.animationId());
+		npc.setAnimationFrame(0);
 	}
 }
