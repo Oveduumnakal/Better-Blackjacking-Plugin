@@ -5,12 +5,16 @@
 
 ## Contents
 
+- [com.oveduumnakal.betterblackjacking.ActivationGate](#comoveduumnakalbetterblackjackingactivationgate)
 - [com.oveduumnakal.betterblackjacking.BetterBlackjackingColors](#comoveduumnakalbetterblackjackingbetterblackjackingcolors)
 - [com.oveduumnakal.betterblackjacking.BetterBlackjackingConfig](#comoveduumnakalbetterblackjackingbetterblackjackingconfig)
 - [com.oveduumnakal.betterblackjacking.BetterBlackjackingPlugin](#comoveduumnakalbetterblackjackingbetterblackjackingplugin)
+- [com.oveduumnakal.betterblackjacking.BlackjackTarget](#comoveduumnakalbetterblackjackingblackjacktarget)
+- [com.oveduumnakal.betterblackjacking.Blackjacks](#comoveduumnakalbetterblackjackingblackjacks)
 - [com.oveduumnakal.betterblackjacking.Changelog](#comoveduumnakalbetterblackjackingchangelog)
 - [com.oveduumnakal.betterblackjacking.Changelog.Release](#comoveduumnakalbetterblackjackingchangelogrelease)
 - [com.oveduumnakal.betterblackjacking.DebugLog](#comoveduumnakalbetterblackjackingdebuglog)
+- [com.oveduumnakal.betterblackjacking.Pollnivneach](#comoveduumnakalbetterblackjackingpollnivneach)
 - [com.oveduumnakal.betterblackjacking.SubTickClock](#comoveduumnakalbetterblackjackingsubtickclock)
 - [com.oveduumnakal.betterblackjacking.TargetState](#comoveduumnakalbetterblackjackingtargetstate)
 - [com.oveduumnakal.betterblackjacking.TargetStateView](#comoveduumnakalbetterblackjackingtargetstateview)
@@ -18,6 +22,221 @@
 - [com.oveduumnakal.betterblackjacking.TimerOverlay](#comoveduumnakalbetterblackjackingtimeroverlay)
 - [com.oveduumnakal.betterblackjacking.TimerStyle](#comoveduumnakalbetterblackjackingtimerstyle)
 - [com.oveduumnakal.betterblackjacking.WakeAnimation](#comoveduumnakalbetterblackjackingwakeanimation)
+
+---
+
+## com.oveduumnakal.betterblackjacking.ActivationGate
+
+_class_
+
+`final class ActivationGate`
+
+Decides whether the plugin is active and which targets it draws, from three plain values: where the
+player is, what they wield and their boosted Thieving level.
+
+<p>The plugin is active only while the player is in `Pollnivneach` with a blackjack
+(`Blackjacks`) in the weapon slot. A `BlackjackTarget` is eligible when the plugin is
+active and the boosted Thieving level is at least the target's requirement.
+
+<p>A gate is immutable and cheap to build, so the plugin can keep one and replace it from event
+handlers: `#withRegionId(int)` on movement, `#withWeaponItemId(int)` on
+`ItemContainerChanged` and `#withThievingLevel(int)` on `StatChanged`.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `static final ActivationGate` | `CLOSED` | A closed gate: no region, no weapon, Thieving level 0. |
+| `static final int` | `NO_WEAPON` | The item ID of an empty weapon slot. |
+| `private final boolean` | `active` |  |
+| `private final int` | `regionId` |  |
+| `private final int` | `thievingLevel` |  |
+| `private final int` | `weaponItemId` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `ActivationGate(int regionId, int weaponItemId, int thievingLevel)` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `boolean` | `isActive()` | Whether the plugin is active: the player is in Pollnivneach with a blackjack equipped. |
+| `boolean` | `isEligible(BlackjackTarget target)` | Whether a target is eligible: the plugin is active and the boosted Thieving level meets the target's requirement. |
+| `boolean` | `isEligibleNpc(int npcId)` | Whether an NPC is an eligible target, as `#isEligible(BlackjackTarget)` for the target its ID belongs to. |
+| `static ActivationGate` | `of(WorldPoint location, int weaponItemId, int boostedThievingLevel)` | Builds a gate from the player's world location. |
+| `static ActivationGate` | `of(int regionId, int weaponItemId, int boostedThievingLevel)` | Builds a gate from the player's map region. |
+| `int` | `regionId()` | Returns the region the gate was built with. |
+| `private static int` | `regionOf(WorldPoint location)` |  |
+| `int` | `thievingLevel()` | Returns the boosted Thieving level the gate was built with. |
+| `public String` | `toString()` | Describes the gate's inputs and result, for debug logging. |
+| `int` | `weaponItemId()` | Returns the weapon-slot item ID the gate was built with. |
+| `ActivationGate` | `withLocation(WorldPoint location)` | Returns a gate with the player at a different location, or this gate if the region is unchanged. |
+| `ActivationGate` | `withRegionId(int newRegionId)` | Returns a gate with the player in a different region, or this gate if the region is unchanged. |
+| `ActivationGate` | `withThievingLevel(int newBoostedThievingLevel)` | Returns a gate with a different boosted Thieving level, or this gate if the level is unchanged. |
+| `ActivationGate` | `withWeaponItemId(int newWeaponItemId)` | Returns a gate with a different weapon, or this gate if the weapon is unchanged. |
+
+### Field Detail
+
+#### CLOSED
+
+`static final ActivationGate CLOSED`
+
+A closed gate: no region, no weapon, Thieving level 0. Use it before the player logs in.
+
+#### NO_WEAPON
+
+`static final int NO_WEAPON`
+
+The item ID of an empty weapon slot.
+
+#### active
+
+`private final boolean active`
+
+#### regionId
+
+`private final int regionId`
+
+#### thievingLevel
+
+`private final int thievingLevel`
+
+#### weaponItemId
+
+`private final int weaponItemId`
+
+### Constructor Detail
+
+#### ActivationGate
+
+`private ActivationGate(int regionId, int weaponItemId, int thievingLevel)`
+
+### Method Detail
+
+#### isActive
+
+`boolean isActive()`
+
+Whether the plugin is active: the player is in Pollnivneach with a blackjack equipped.
+
+- **Returns:** `true` if the plugin should track and draw targets
+
+#### isEligible
+
+`boolean isEligible(BlackjackTarget target)`
+
+Whether a target is eligible: the plugin is active and the boosted Thieving level meets the
+target's requirement.
+
+- **Parameter** `target` — the target; may be `null`
+- **Returns:** `true` if the target should be tracked and drawn; `false` for `null`
+
+#### isEligibleNpc
+
+`boolean isEligibleNpc(int npcId)`
+
+Whether an NPC is an eligible target, as `#isEligible(BlackjackTarget)` for the target
+its ID belongs to.
+
+- **Parameter** `npcId` — the NPC's ID, as from `NPC#getId()`
+- **Returns:** `true` if the NPC is a blackjack target that is eligible
+
+#### of
+
+`static ActivationGate of(WorldPoint location, int weaponItemId, int boostedThievingLevel)`
+
+Builds a gate from the player's world location.
+
+- **Parameter** `location` — the player's world location; `null` counts as outside Pollnivneach
+- **Parameter** `weaponItemId` — the item ID in the weapon slot, or `#NO_WEAPON` if it's empty
+- **Parameter** `boostedThievingLevel` — the player's boosted Thieving level
+- **Returns:** the gate
+
+#### of
+
+`static ActivationGate of(int regionId, int weaponItemId, int boostedThievingLevel)`
+
+Builds a gate from the player's map region.
+
+- **Parameter** `regionId` — the region the player is in, as from `WorldPoint#getRegionID()`
+- **Parameter** `weaponItemId` — the item ID in the weapon slot, or `#NO_WEAPON` if it's empty
+- **Parameter** `boostedThievingLevel` — the player's boosted Thieving level
+- **Returns:** the gate
+
+#### regionId
+
+`int regionId()`
+
+Returns the region the gate was built with.
+
+- **Returns:** the region ID
+
+#### regionOf
+
+`private static int regionOf(WorldPoint location)`
+
+#### thievingLevel
+
+`int thievingLevel()`
+
+Returns the boosted Thieving level the gate was built with.
+
+- **Returns:** the boosted Thieving level
+
+#### toString
+
+`public String toString()`
+
+Describes the gate's inputs and result, for debug logging.
+
+- **Returns:** a one-line description
+
+#### weaponItemId
+
+`int weaponItemId()`
+
+Returns the weapon-slot item ID the gate was built with.
+
+- **Returns:** the item ID, or `#NO_WEAPON`
+
+#### withLocation
+
+`ActivationGate withLocation(WorldPoint location)`
+
+Returns a gate with the player at a different location, or this gate if the region is unchanged.
+
+- **Parameter** `location` — the player's world location; `null` counts as outside Pollnivneach
+- **Returns:** the updated gate
+
+#### withRegionId
+
+`ActivationGate withRegionId(int newRegionId)`
+
+Returns a gate with the player in a different region, or this gate if the region is unchanged.
+
+- **Parameter** `newRegionId` — the region the player is now in
+- **Returns:** the updated gate
+
+#### withThievingLevel
+
+`ActivationGate withThievingLevel(int newBoostedThievingLevel)`
+
+Returns a gate with a different boosted Thieving level, or this gate if the level is unchanged.
+
+- **Parameter** `newBoostedThievingLevel` — the player's boosted Thieving level
+- **Returns:** the updated gate
+
+#### withWeaponItemId
+
+`ActivationGate withWeaponItemId(int newWeaponItemId)`
+
+Returns a gate with a different weapon, or this gate if the weapon is unchanged.
+
+- **Parameter** `newWeaponItemId` — the item ID now in the weapon slot, or `#NO_WEAPON` if it's empty
+- **Returns:** the updated gate
 
 ---
 
@@ -353,6 +572,173 @@ Entry point of the Better Blackjacking plugin, which helps players blackjack in 
 next knock-out, times the two guaranteed pickpockets, and smooths the target's wake-up animation.
 This scaffold only registers the plugin with the client; the event wiring and overlays arrive in
 later changes.
+
+---
+
+## com.oveduumnakal.betterblackjacking.BlackjackTarget
+
+_enum_
+
+`public enum BlackjackTarget`
+
+The Pollnivneach NPCs that can be blackjacked, with their NPC IDs and the Thieving level needed to
+pickpocket them.
+
+<p>Villagers are deliberately left out: they need only Thieving 30 but give no experience after
+The Feud. The pre-quest Menaphite Thug (`NpcID#FEUD_EGYPTIAN_DOORMAN_1`) can't be blackjacked
+and is left out too.
+
+### Enum Constant Summary
+
+| Enum Constant | Description |
+|---|---|
+| `BEARDED_BANDIT` | The bearded bandit in northern Pollnivneach: combat 41, Thieving 45. |
+| `CLEAN_SHAVEN_BANDIT` | The clean-shaven bandit in northern Pollnivneach: combat 56, Thieving 55. |
+| `MENAPHITE_THUG` | The Menaphite Thug in southern Pollnivneach: combat 55, Thieving 65. |
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private static final Map<Integer,BlackjackTarget>` | `BY_NPC_ID` |  |
+| `private final int[]` | `npcIds` |  |
+| `private final int` | `thievingLevel` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `BlackjackTarget(int thievingLevel, int... npcIds)` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public static BlackjackTarget` | `forNpcId(int npcId)` | Looks up the target an NPC ID belongs to. |
+| `public int[]` | `npcIds()` | Returns every NPC ID this target appears as. |
+| `public int` | `thievingLevel()` | Returns the Thieving level needed to pickpocket, and so to usefully blackjack, this target. |
+
+### Enum Constant Detail
+
+#### BEARDED_BANDIT
+
+`BEARDED_BANDIT`
+
+The bearded bandit in northern Pollnivneach: combat 41, Thieving 45.
+
+#### CLEAN_SHAVEN_BANDIT
+
+`CLEAN_SHAVEN_BANDIT`
+
+The clean-shaven bandit in northern Pollnivneach: combat 56, Thieving 55.
+
+#### MENAPHITE_THUG
+
+`MENAPHITE_THUG`
+
+The Menaphite Thug in southern Pollnivneach: combat 55, Thieving 65.
+
+### Field Detail
+
+#### BY_NPC_ID
+
+`private static final Map<Integer,BlackjackTarget> BY_NPC_ID`
+
+#### npcIds
+
+`private final int[] npcIds`
+
+#### thievingLevel
+
+`private final int thievingLevel`
+
+### Constructor Detail
+
+#### BlackjackTarget
+
+`BlackjackTarget(int thievingLevel, int... npcIds)`
+
+### Method Detail
+
+#### forNpcId
+
+`public static BlackjackTarget forNpcId(int npcId)`
+
+Looks up the target an NPC ID belongs to.
+
+- **Parameter** `npcId` — the NPC's ID, as from `NPC#getId()`
+- **Returns:** the target, or `null` if the NPC can't be blackjacked
+
+#### npcIds
+
+`public int[] npcIds()`
+
+Returns every NPC ID this target appears as. The array is a copy, so callers may keep or change it.
+
+- **Returns:** the NPC IDs
+
+#### thievingLevel
+
+`public int thievingLevel()`
+
+Returns the Thieving level needed to pickpocket, and so to usefully blackjack, this target.
+
+- **Returns:** the Thieving level requirement
+
+---
+
+## com.oveduumnakal.betterblackjacking.Blackjacks
+
+_class_
+
+`final class Blackjacks`
+
+The blackjacks that turn the plugin on when wielded.
+
+<p>These are the nine equippable blackjacks: oak, willow and maple, each plain, offensive
+(`(o)`) and defensive (`(d)`). The makeshift blackjack (`ItemID#VMQ4_JANUS_SLAP`)
+is a quest item that can't be equipped, so it isn't one.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private static final Set<Integer>` | `ITEM_IDS` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `Blackjacks()` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `static boolean` | `isBlackjack(int itemId)` | Whether an item is an equippable blackjack. |
+
+### Field Detail
+
+#### ITEM_IDS
+
+`private static final Set<Integer> ITEM_IDS`
+
+### Constructor Detail
+
+#### Blackjacks
+
+`private Blackjacks()`
+
+### Method Detail
+
+#### isBlackjack
+
+`static boolean isBlackjack(int itemId)`
+
+Whether an item is an equippable blackjack.
+
+- **Parameter** `itemId` — the item ID, e.g. of the weapon slot; `-1` for an empty slot
+- **Returns:** `true` if it is one of the nine equippable blackjacks
 
 ---
 
@@ -745,6 +1131,80 @@ Records the tick of the latest knock-out, so later lines show `ko+` the ticks si
 #### writeToLog
 
 `private static void writeToLog(String line)`
+
+---
+
+## com.oveduumnakal.betterblackjacking.Pollnivneach
+
+_class_
+
+`final class Pollnivneach`
+
+The area the plugin works in: the town of Pollnivneach.
+
+<p>The town is taken to be map regions {@value #NORTH_REGION_ID} (x 3328–3391, y 2944–3007) and
+{@value #SOUTH_REGION_ID} (x 3328–3391, y 2880–2943, which holds the town's southern edge). Every
+Pollnivneach NPC spawn on the OSRS Wiki falls in one of them. The plane doesn't matter.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `static final int` | `NORTH_REGION_ID` | The region holding most of the town, including the bandits and thugs. |
+| `static final int` | `SOUTH_REGION_ID` | The region just south of `#NORTH_REGION_ID`, holding the town's southern edge. |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `Pollnivneach()` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `static boolean` | `contains(WorldPoint point)` | Whether a world point is in Pollnivneach. |
+| `static boolean` | `containsRegion(int regionId)` | Whether a map region is part of Pollnivneach. |
+
+### Field Detail
+
+#### NORTH_REGION_ID
+
+`static final int NORTH_REGION_ID`
+
+The region holding most of the town, including the bandits and thugs.
+
+#### SOUTH_REGION_ID
+
+`static final int SOUTH_REGION_ID`
+
+The region just south of `#NORTH_REGION_ID`, holding the town's southern edge.
+
+### Constructor Detail
+
+#### Pollnivneach
+
+`private Pollnivneach()`
+
+### Method Detail
+
+#### contains
+
+`static boolean contains(WorldPoint point)`
+
+Whether a world point is in Pollnivneach.
+
+- **Parameter** `point` — the point, e.g. the local player's world location; may be `null`
+- **Returns:** `true` if the point is in one of the town's regions; `false` for `null`
+
+#### containsRegion
+
+`static boolean containsRegion(int regionId)`
+
+Whether a map region is part of Pollnivneach.
+
+- **Parameter** `regionId` — the region ID, as from `WorldPoint#getRegionID()`
+- **Returns:** `true` for regions {@value #NORTH_REGION_ID} and {@value #SOUTH_REGION_ID}
 
 ---
 
