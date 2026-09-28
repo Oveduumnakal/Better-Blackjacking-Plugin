@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -48,30 +47,15 @@ public class SharedContractsTest
 	@Test
 	public void wakeAnimationsCarryTheCacheAnimationIds()
 	{
-		assertArrayEquals(new int[0], WakeAnimation.OFF.animationIds());
-		assertArrayEquals(new int[]{2760}, WakeAnimation.SITUPS_GET_UP.animationIds());
-		assertArrayEquals(new int[]{2759, 2760}, WakeAnimation.SIT_UP_THEN_GET_UP.animationIds());
-		assertArrayEquals(new int[]{7190}, WakeAnimation.SIT_UP_SHORT.animationIds());
-		assertArrayEquals(new int[]{6283}, WakeAnimation.CYRISUS_SIT_UP.animationIds());
-		assertArrayEquals(new int[]{6286}, WakeAnimation.CYRISUS_STAND_UP.animationIds());
-		assertArrayEquals(new int[]{6283, 6286}, WakeAnimation.CYRISUS_SIT_UP_THEN_STAND.animationIds());
-		assertArrayEquals(new int[]{7122}, WakeAnimation.MAX_GET_UP.animationIds());
+		assertEquals(-1, WakeAnimation.NO_ANIMATION);
+		assertEquals(WakeAnimation.NO_ANIMATION, WakeAnimation.OFF.animationId());
+		assertEquals(7122, WakeAnimation.MAX_GET_UP.animationId());
 	}
 
 	@Test
 	public void wakeAnimationsShowTheirDisplayNames()
 	{
-		List<String> expected = Arrays.asList("Off", "Situps get up", "Sit-up, then get up", "Sit-up short",
-				"Cyrisus sit up", "Cyrisus stand up", "Cyrisus sit up, then stand", "Max get up");
-		assertEquals(expected, labels(WakeAnimation.values()));
-	}
-
-	@Test
-	public void wakeAnimationIdsAreACopy()
-	{
-		int[] ids = WakeAnimation.SITUPS_GET_UP.animationIds();
-		ids[0] = -1;
-		assertArrayEquals(new int[]{2760}, WakeAnimation.SITUPS_GET_UP.animationIds());
+		assertEquals(Arrays.asList("Off", "Max get up"), labels(WakeAnimation.values()));
 	}
 
 	@Test

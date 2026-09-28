@@ -233,25 +233,23 @@ Outline `npc.getConvexHull()` (the click box) in the state colour. Configurable 
 
 ### 5.5 Wake-up animation
 
-When the tracked target's animation changes to `808` within 2 ticks of T+5, replace it with the
-chosen get-up animation using `npc.setAnimation(id)` and `setAnimationFrame(0)`. This is
+**Decided (2026-09-27): Max get up, 7122 (`AnimationID.MAX_GET_UP`, 1.6 s [measured via cache
+viewer]), played when the target wakes.** When the tracked target's animation changes to `808`
+within 2 ticks of T+5, `WakeAnimationController` replaces it with the chosen animation using
+`npc.setAnimation(id)` and `setAnimationFrame(0)`. It isn't started early, during `WAKING`. This is
 cosmetic and only on the player's screen; the state has already switched to `KNOCK_OUT`, and the
-next knock-out's `838` replaces it straight away. Options (lengths from the cache [measured via
-cache viewer]):
+next knock-out's `838` replaces it straight away. Setting the animation fires another
+`AnimationChanged`, but the handler only reacts to `808`, so it doesn't recurse.
 
-| Option | ID(s) | Length | Notes |
+| Option | ID | Length | Notes |
 |---|---|---|---|
-| Off | – | – | The game's snap to standing (default until decided) |
-| Situps get up | 2760 `SITUPS_GETUP` | 0.5 s | |
-| Sit-up, then get up | 2759 → 2760 | 1.1 s | |
-| Sit-up short | 7190 `SITUP_SHORT` | 1.9 s | |
-| Cyrisus sit up | 6283 `DREAM_CYRISUS_SIT_UP_TRANSITION` | 1.2 s | Unconscious to sitting, then snaps to standing |
-| Cyrisus stand up | 6286 `DREAM_CYRISUS_STAND_UP_TRANSITION` | 2.0 s | Crouch to standing |
-| Cyrisus sit up, then stand | 6283 → 6286 | 3.2 s | |
-| Max get up | 7122 `MAX_GET_UP` | 1.6 s | |
+| Off | – | – | The game's snap to standing |
+| Max get up | 7122 `MAX_GET_UP` | 1.6 s | Default |
 
-The user rejected 534 (`HUMAN_GETUP`), 1409 and 3807, so they are not options. The choice among
-these candidates is still open (§10 row 1).
+The user rejected 534 (`HUMAN_GETUP`), 1409 and 3807, then the sit-up candidates reviewed in
+`planning/wake-animation-previews/` (2760 `SITUPS_GETUP`, 2759 → 2760, 7190 `SITUP_SHORT`, 6283 and
+6286 from Cyrisus, and 6283 → 6286). None of them are options, so `WakeAnimation` carries a single
+animation ID per option and there are no two-animation sequences.
 
 ---
 
@@ -269,7 +267,7 @@ Config group `betterblackjacking`. Sections, in order:
 | Colours | `attackingColor` | Attacking | Color | red |
 | Timer | `timerStyle` | Timer style | enum {PIE, SECONDS, OFF} | PIE |
 | Pickpockets | `pickpocketPips` | Show pickpocket pips | boolean | true |
-| Animation | `wakeAnimation` | Wake-up animation | enum (§5.5) | OFF (pending) |
+| Animation | `wakeAnimation` | Wake-up animation | enum {OFF, MAX_GET_UP} (§5.5) | MAX_GET_UP |
 | Advanced (closed) | `knockOutTicks` | Knock-out duration | int 3–8, ticks | 5 |
 | Advanced (closed) | `debugLogging` | Debug logging | boolean | false |
 
@@ -552,7 +550,7 @@ Writes the changelog entry `1.0`. The Plugin Hub submission is a human gate.
 
 | # | Question | Decision |
 |---|---|---|
-| 1 | Wake-up animation | **Open.** The user rejected 534, 1409 and 3807. The sit-up candidates in §5.5 are under review (GIFs in `planning/wake-animation-previews/`). Default: Off. Also open: whether to start the animation a tick early, during `WAKING`, so the target is standing right at T+5. |
+| 1 | Wake-up animation | Max get up (7122 `MAX_GET_UP`), played when the target wakes (at T+5, replacing `808`), not started early. The other candidates were rejected (§5.5). Default: Max get up. Decided 2026-09-27. |
 | 2 | Villagers | Excluded entirely |
 | 3 | Level gate | Boosted Thieving level |
 | 4 | Scale to tile | Sizes follow the target's on-screen tile (smaller when zoomed out), with min/max clamps |

@@ -116,6 +116,9 @@ public class BetterBlackjackingPlugin extends Plugin
 	@Inject
 	private PickpocketIndicatorOverlay pickpocketIndicatorOverlay;
 
+	@Inject
+	private WakeAnimationController wakeAnimationController;
+
 	private DebugLog debugLog;
 
 	private int wakeNpcIndex = KnockoutTracker.NO_NPC;
@@ -430,13 +433,14 @@ public class BetterBlackjackingPlugin extends Plugin
 
 	/**
 	 * Called once when the last knocked-out target plays {@code HUMAN_READY} (the game snapping it to
-	 * standing) within {@link #WAKE_WINDOW_TICKS} ticks of its wake tick. The wake-up animation
-	 * (PLAN §5.5) replaces the animation here. It does nothing yet.
+	 * standing) within {@link #WAKE_WINDOW_TICKS} ticks of its wake tick. It replaces that animation with
+	 * the configured wake-up animation (PLAN §5.5) through {@link WakeAnimationController}.
 	 *
 	 * @param npc the target that woke
 	 */
 	void onTargetWoke(NPC npc)
 	{
+		wakeAnimationController.play(npc);
 	}
 
 	private void readClientState()

@@ -33,11 +33,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import com.oveduumnakal.betterblackjacking.WakeAnimation;
@@ -63,7 +61,7 @@ import net.runelite.client.ui.DrawManager;
  * human skeleton the bandits and thugs share, and saves the frames for {@code scripts/make-preview-gifs.py}
  * to turn into the README GIFs.
  *
- * <p>Each clip lies unconscious, plays the option's animations back to back, then stands (see
+ * <p>Each clip lies unconscious, plays the option's animation, then stands (see
  * {@link PreviewTimeline}). Clips go to {@code <RuneLite dir>/better-blackjacking-previews/<OPTION>/},
  * in the form {@link CapturedClip} describes. A few ticks after logging in, it records the clips that
  * aren't on disk yet; {@code ::bbpreview} records them all again. Stand still and leave the camera alone
@@ -275,7 +273,7 @@ public class PreviewRecorderPlugin extends Plugin
 
 		clip = next;
 		cycle = 0;
-		timeline = PreviewTimeline.getUp(next.animationIds(), this::animationCycles);
+		timeline = PreviewTimeline.getUp(new int[]{next.animationId()}, this::animationCycles);
 		captured = new CapturedClip(labelOf(next));
 		crop = cropAround(player);
 	}
@@ -312,10 +310,7 @@ public class PreviewRecorderPlugin extends Plugin
 
 	private static String labelOf(WakeAnimation animation)
 	{
-		final String ids = Arrays.stream(animation.animationIds())
-				.mapToObj(Integer::toString)
-				.collect(Collectors.joining("+"));
-		return animation + " (" + ids + ")";
+		return animation + " (" + animation.animationId() + ")";
 	}
 
 	private void capture()

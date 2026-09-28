@@ -265,7 +265,7 @@ public interface BetterBlackjackingConfig extends Config
 	/**
 	 * The get-up animation the target plays, on this player's screen only, when it wakes.
 	 *
-	 * @return the wake-up animation (default {@link WakeAnimation#OFF})
+	 * @return the wake-up animation (default {@link WakeAnimation#MAX_GET_UP})
 	 */
 	@ConfigItem(
 			keyName = KEY_WAKE_ANIMATION,
@@ -277,7 +277,7 @@ public interface BetterBlackjackingConfig extends Config
 	)
 	default WakeAnimation wakeAnimation()
 	{
-		return WakeAnimation.OFF;
+		return WakeAnimation.MAX_GET_UP;
 	}
 
 	/**

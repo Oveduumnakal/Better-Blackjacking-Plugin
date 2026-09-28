@@ -33,7 +33,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.oveduumnakal.betterblackjacking.WakeAnimation;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -83,8 +82,9 @@ public class PreviewTimelineTest
 	@Test
 	public void twoAnimationGetUpPlaysBackToBackBetweenLyingAndStanding()
 	{
-		final PreviewTimeline timeline = PreviewTimeline.getUp(
-				WakeAnimation.CYRISUS_SIT_UP_THEN_STAND.animationIds(), CYCLES::get);
+		final int[] getUp = {AnimationID.DREAM_CYRISUS_SIT_UP_TRANSITION,
+				AnimationID.DREAM_CYRISUS_STAND_UP_TRANSITION};
+		final PreviewTimeline timeline = PreviewTimeline.getUp(getUp, CYCLES::get);
 		final int lying = PreviewTimeline.LYING_CYCLES;
 
 		assertEquals(lying + 60 + 100 + PreviewTimeline.STANDING_CYCLES, timeline.length());
