@@ -14,6 +14,7 @@
 - [com.oveduumnakal.betterblackjacking.Changelog](#comoveduumnakalbetterblackjackingchangelog)
 - [com.oveduumnakal.betterblackjacking.Changelog.Release](#comoveduumnakalbetterblackjackingchangelogrelease)
 - [com.oveduumnakal.betterblackjacking.DebugLog](#comoveduumnakalbetterblackjackingdebuglog)
+- [com.oveduumnakal.betterblackjacking.PickpocketIndicatorOverlay](#comoveduumnakalbetterblackjackingpickpocketindicatoroverlay)
 - [com.oveduumnakal.betterblackjacking.Pollnivneach](#comoveduumnakalbetterblackjackingpollnivneach)
 - [com.oveduumnakal.betterblackjacking.SubTickClock](#comoveduumnakalbetterblackjackingsubtickclock)
 - [com.oveduumnakal.betterblackjacking.TargetState](#comoveduumnakalbetterblackjackingtargetstate)
@@ -1131,6 +1132,171 @@ Records the tick of the latest knock-out, so later lines show `ko+` the ticks si
 #### writeToLog
 
 `private static void writeToLog(String line)`
+
+---
+
+## com.oveduumnakal.betterblackjacking.PickpocketIndicatorOverlay
+
+_class_
+
+`public class PickpocketIndicatorOverlay`
+
+Draws the pickpocket pips under the knocked-out target's timer (spec §5.4).
+
+<p>Two pips sit side by side just below where the pie timer is drawn. The first
+`TargetStateView#pickpocketsLeft()` are filled in the `TargetState#SAFE` colour and the
+rest are hollow outlines in the same colour. When no pickpockets are left both pips are hollow and
+the word `STOP` is drawn below them in the `TargetState#WAKING` colour. Everything is
+sized from the target's tile through `TileScale`, and nothing is drawn for a target whose
+tile isn't on screen.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `static final int` | `PIP_COUNT` | How many pips are drawn: the most pickpockets a single knock-out allows. |
+| `static final int` | `STOP_FONT_MAX` | The largest `STOP` font size, in pixels. |
+| `static final int` | `STOP_FONT_MIN` | The smallest `STOP` font size, in pixels. |
+| `static final double` | `STOP_FONT_SCALE` | The `STOP` font size as a fraction of `TileScale#fontSize(int)`. |
+| `static final String` | `STOP_TEXT` | The word drawn below the pips when no pickpockets are left. |
+| `private final BetterBlackjackingConfig` | `config` |  |
+| `private final Function<NPC,Polygon>` | `tilePolygon` |  |
+| `private final TargetStateView` | `view` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `PickpocketIndicatorOverlay(Client client, TargetStateView view, BetterBlackjackingConfig config)` | Creates the overlay, reading each target's tile polygon from the client's perspective. |
+| `PickpocketIndicatorOverlay(Function<NPC,Polygon> tilePolygon, TargetStateView view, BetterBlackjackingConfig config)` | Creates the overlay with a custom tile polygon source, so tests can supply fixed polygons. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `private static Polygon` | `canvasTilePoly(Client client, NPC npc)` |  |
+| `static Rectangle[]` | `pipBounds(Point anchor, int u)` | Where the two pips go for a tile anchored at `anchor` with unit `u`: side by side with a gap of half a pip, centred horizontally on the anchor, just below where the pie timer's bottom edge would be. |
+| `public Dimension` | `render(Graphics2D graphics)` | Draws the pips (and `STOP` at zero) for each knocked-out eligible target, while the plugin is active and the pips are enabled. |
+| `private void` | `renderStop(Graphics2D graphics, Point anchor, Rectangle firstPip, int u)` |  |
+| `private void` | `renderTarget(Graphics2D graphics, NPC npc)` |  |
+| `static int` | `stopFontSize(int u)` | The `STOP` font size: `TileScale#fontSize(int)` times `#STOP_FONT_SCALE`, clamped to [`#STOP_FONT_MIN`, `#STOP_FONT_MAX`] px. |
+| `private static int` | `verticalGap(int diameter)` |  |
+
+### Field Detail
+
+#### PIP_COUNT
+
+`static final int PIP_COUNT`
+
+How many pips are drawn: the most pickpockets a single knock-out allows.
+
+#### STOP_FONT_MAX
+
+`static final int STOP_FONT_MAX`
+
+The largest `STOP` font size, in pixels.
+
+#### STOP_FONT_MIN
+
+`static final int STOP_FONT_MIN`
+
+The smallest `STOP` font size, in pixels.
+
+#### STOP_FONT_SCALE
+
+`static final double STOP_FONT_SCALE`
+
+The `STOP` font size as a fraction of `TileScale#fontSize(int)`.
+
+#### STOP_TEXT
+
+`static final String STOP_TEXT`
+
+The word drawn below the pips when no pickpockets are left.
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+#### tilePolygon
+
+`private final Function<NPC,Polygon> tilePolygon`
+
+#### view
+
+`private final TargetStateView view`
+
+### Constructor Detail
+
+#### PickpocketIndicatorOverlay
+
+`PickpocketIndicatorOverlay(Client client, TargetStateView view, BetterBlackjackingConfig config)`
+
+Creates the overlay, reading each target's tile polygon from the client's perspective.
+
+- **Parameter** `client` — the client, used to project the target's tile onto the canvas
+- **Parameter** `view` — the plugin's state
+- **Parameter** `config` — the plugin's config
+
+#### PickpocketIndicatorOverlay
+
+`PickpocketIndicatorOverlay(Function<NPC,Polygon> tilePolygon, TargetStateView view, BetterBlackjackingConfig config)`
+
+Creates the overlay with a custom tile polygon source, so tests can supply fixed polygons.
+
+- **Parameter** `tilePolygon` — gives a target's tile polygon on the canvas, or `null` when it's off-screen
+- **Parameter** `view` — the plugin's state
+- **Parameter** `config` — the plugin's config
+
+### Method Detail
+
+#### canvasTilePoly
+
+`private static Polygon canvasTilePoly(Client client, NPC npc)`
+
+#### pipBounds
+
+`static Rectangle[] pipBounds(Point anchor, int u)`
+
+Where the two pips go for a tile anchored at `anchor` with unit `u`: side by side
+with a gap of half a pip, centred horizontally on the anchor, just below where the pie timer's
+bottom edge would be.
+
+- **Parameter** `anchor` — the tile's centre on the canvas
+- **Parameter** `u` — the tile unit, greater than 0
+- **Returns:** the bounds of each pip, left to right
+
+#### render
+
+`public Dimension render(Graphics2D graphics)`
+
+Draws the pips (and `STOP` at zero) for each knocked-out eligible target, while the plugin
+is active and the pips are enabled.
+
+- **Parameter** `graphics` — the canvas graphics
+- **Returns:** `null`, as a dynamic overlay has no fixed size
+
+#### renderStop
+
+`private void renderStop(Graphics2D graphics, Point anchor, Rectangle firstPip, int u)`
+
+#### renderTarget
+
+`private void renderTarget(Graphics2D graphics, NPC npc)`
+
+#### stopFontSize
+
+`static int stopFontSize(int u)`
+
+The `STOP` font size: `TileScale#fontSize(int)` times `#STOP_FONT_SCALE`,
+clamped to [`#STOP_FONT_MIN`, `#STOP_FONT_MAX`] px.
+
+- **Parameter** `u` — the tile unit, greater than 0
+- **Returns:** the font size in pixels
+
+#### verticalGap
+
+`private static int verticalGap(int diameter)`
 
 ---
 
