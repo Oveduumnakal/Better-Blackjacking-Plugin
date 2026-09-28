@@ -14,6 +14,7 @@
 - [com.oveduumnakal.betterblackjacking.TargetState](#comoveduumnakalbetterblackjackingtargetstate)
 - [com.oveduumnakal.betterblackjacking.TargetStateView](#comoveduumnakalbetterblackjackingtargetstateview)
 - [com.oveduumnakal.betterblackjacking.TileScale](#comoveduumnakalbetterblackjackingtilescale)
+- [com.oveduumnakal.betterblackjacking.TimerOverlay](#comoveduumnakalbetterblackjackingtimeroverlay)
 - [com.oveduumnakal.betterblackjacking.TimerStyle](#comoveduumnakalbetterblackjackingtimerstyle)
 - [com.oveduumnakal.betterblackjacking.WakeAnimation](#comoveduumnakalbetterblackjackingwakeanimation)
 
@@ -975,6 +976,157 @@ The tile unit `u`: the on-screen width of the tile polygon's bounds, in pixels.
                 `null` when the tile is off-screen
 - **Returns:** the tile width in pixels, or 0 if the polygon is `null` or degenerate (fewer than
 three points, or no width)
+
+---
+
+## com.oveduumnakal.betterblackjacking.TimerOverlay
+
+_class_
+
+`public class TimerOverlay`
+
+Draws the knock-out timer on the knocked-out target's tile, as a draining pie or as the seconds
+left, in the target's state colour.
+
+<p>The timer is drawn only while the plugin is active, the timer style isn't
+`TimerStyle#OFF`, and the target is knocked out (`TargetState#SAFE` or
+`TargetState#WAKING`). It is centred on the tile's projected centre and sized from the tile
+unit (see `TileScale`), and a target whose tile isn't on screen is skipped.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private static final long` | `MILLIS_PER_TENTH` |  |
+| `private final BetterBlackjackingConfig` | `config` |  |
+| `private Font` | `font` |  |
+| `private int` | `fontSize` |  |
+| `private final ProgressPieComponent` | `pie` |  |
+| `private final Function<NPC,Polygon>` | `tilePoly` |  |
+| `private final TargetStateView` | `view` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `TimerOverlay(Client client, TargetStateView view, BetterBlackjackingConfig config)` | Creates the overlay, projecting each target's tile with `Perspective.getCanvasTilePoly`. |
+| `TimerOverlay(TargetStateView view, BetterBlackjackingConfig config, Function<NPC,Polygon> tilePoly)` | Creates the overlay with a custom tile projection, so tests can supply the polygons. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `private static Polygon` | `canvasTilePoly(Client client, NPC npc)` |  |
+| `private Font` | `fontOfSize(int size)` |  |
+| `static double` | `progress(long remainingMillis, long durationMillis)` | The pie's filled fraction: the share of the knock-out still to run, which drains from 1 at the knock-out to 0 when the target wakes. |
+| `public Dimension` | `render(Graphics2D graphics)` | Draws the timer on every knocked-out eligible target whose tile is on screen. |
+| `private void` | `renderPie(Graphics2D graphics, Point anchor, int u, Color color)` |  |
+| `private void` | `renderSeconds(Graphics2D graphics, Point anchor, int u, Color color)` |  |
+| `static String` | `secondsText(long remainingMillis)` | The seconds timer's text: the time left in seconds with one decimal, e.g. |
+
+### Field Detail
+
+#### MILLIS_PER_TENTH
+
+`private static final long MILLIS_PER_TENTH`
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+#### font
+
+`private Font font`
+
+#### fontSize
+
+`private int fontSize`
+
+#### pie
+
+`private final ProgressPieComponent pie`
+
+#### tilePoly
+
+`private final Function<NPC,Polygon> tilePoly`
+
+#### view
+
+`private final TargetStateView view`
+
+### Constructor Detail
+
+#### TimerOverlay
+
+`public TimerOverlay(Client client, TargetStateView view, BetterBlackjackingConfig config)`
+
+Creates the overlay, projecting each target's tile with `Perspective.getCanvasTilePoly`.
+
+- **Parameter** `client` — the client, used to project tiles onto the canvas
+- **Parameter** `view` — the plugin state to draw
+- **Parameter** `config` — the plugin config, which gives the timer style
+
+#### TimerOverlay
+
+`TimerOverlay(TargetStateView view, BetterBlackjackingConfig config, Function<NPC,Polygon> tilePoly)`
+
+Creates the overlay with a custom tile projection, so tests can supply the polygons.
+
+- **Parameter** `view` — the plugin state to draw
+- **Parameter** `config` — the plugin config, which gives the timer style
+- **Parameter** `tilePoly` — the canvas polygon of a target's tile, or `null` when it's off-screen
+
+### Method Detail
+
+#### canvasTilePoly
+
+`private static Polygon canvasTilePoly(Client client, NPC npc)`
+
+#### fontOfSize
+
+`private Font fontOfSize(int size)`
+
+#### progress
+
+`static double progress(long remainingMillis, long durationMillis)`
+
+The pie's filled fraction: the share of the knock-out still to run, which drains from 1 at the
+knock-out to 0 when the target wakes.
+
+- **Parameter** `remainingMillis` — the time until the target wakes, in milliseconds
+- **Parameter** `durationMillis` — the full knock-out duration, in milliseconds
+- **Returns:** `remainingMillis / durationMillis` clamped to [0, 1], or 0 if the duration isn't
+positive
+
+#### render
+
+`public Dimension render(Graphics2D graphics)`
+
+Draws the timer on every knocked-out eligible target whose tile is on screen.
+
+- **Parameter** `graphics` — the graphics to draw with
+- **Returns:** `null`, since a dynamic overlay has no size of its own
+
+#### renderPie
+
+`private void renderPie(Graphics2D graphics, Point anchor, int u, Color color)`
+
+#### renderSeconds
+
+`private void renderSeconds(Graphics2D graphics, Point anchor, int u, Color color)`
+
+#### secondsText
+
+`static String secondsText(long remainingMillis)`
+
+The seconds timer's text: the time left in seconds with one decimal, e.g. `2.4`.
+
+<p>It rounds <em>up</em> to the next tenth of a second, so it never shows `0.0` while any
+time is left: 2400 ms is `2.4`, 2401 ms is `2.5`, 50 ms is `0.1`, and only
+0 ms is `0.0`. A negative time is treated as 0.
+
+- **Parameter** `remainingMillis` — the time until the target wakes, in milliseconds
+- **Returns:** the seconds left, formatted with one decimal and a `.` separator
 
 ---
 
