@@ -1,0 +1,433 @@
+tick=0 ko+- interacting player -> none
+tick=0 ko+- animation player anim=-1 pose=-1
+tick=0 ko+- animation player anim=-1 pose=808
+tick=0 ko+- animation Bandit#28416(id=735) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28428(id=737) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28434(id=735) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28440(id=737) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28414(id=735) anim=-1 pose=808
+tick=0 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=5 ko+- chat type=GAMEMESSAGE matched=false msg="<colNORMAL>[<col=c4941a>OSRS TCG</col><colNORMAL>] <colNORMAL>Credited 100 credits from hiscores!"
+tick=33 ko+- interacting player -> none
+tick=36 ko+- interacting player -> Bandit#28420(id=737)
+tick=37 ko+- chat type=SPAM matched=false msg="Your blow only glances off the bandit's head."
+tick=37 ko+- animation player anim=401 pose=824
+tick=37 ko+- overhead Bandit#28420(id=737) text="I'll kill you for that!"
+tick=38 ko+- graphic player graphic=245
+tick=38 ko+- hitsplat player amount=4
+tick=38 ko+- interacting player -> none
+tick=38 ko+- interacting Bandit#28420(id=737) -> player
+tick=38 ko+- animation Bandit#28420(id=737) anim=395 pose=819
+tick=39 ko+- animation player anim=-1 pose=819
+tick=40 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=41 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=41 ko+- hitsplat player amount=0
+tick=41 ko+- interacting player -> Bandit#28420(id=737)
+tick=41 ko+- animation player anim=1156 pose=808
+tick=41 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=42 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=43 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=43 ko+- interacting player -> none
+tick=44 ko+- animation player anim=-1 pose=808
+tick=44 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=44 ko+- interacting player -> Bandit#28420(id=737)
+tick=45 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=45 ko+- hitsplat player amount=0
+tick=45 ko+- animation player anim=1156 pose=808
+tick=45 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=46 ko+- interacting player -> none
+tick=47 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=48 ko+- animation player anim=-1 pose=808
+tick=49 ko+- hitsplat player amount=0
+tick=49 ko+- interacting player -> none
+tick=49 ko+- animation player anim=1156 pose=808
+tick=49 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=50 ko+- interacting Bandit#28420(id=737) -> player
+tick=51 ko+- animation Bandit#28420(id=737) anim=-1 pose=819
+tick=51 ko+- interacting Bandit#28420(id=737) -> player
+tick=52 ko+- animation player anim=-1 pose=824
+tick=53 ko+- interacting Bandit#28420(id=737) -> player
+tick=54 ko+- interacting player -> none
+tick=54 ko+- interacting Bandit#28420(id=737) -> player
+tick=55 ko+- interacting Bandit#28420(id=737) -> player
+tick=56 ko+- interacting Bandit#28420(id=737) -> player
+tick=57 ko+- interacting player -> none
+tick=57 ko+- interacting Bandit#28420(id=737) -> player
+tick=59 ko+- interacting player -> none
+tick=62 ko+- chat type=SPAM matched=false msg="Your blow only glances off the bandit's head."
+tick=62 ko+- interacting player -> Bandit#28415(id=737)
+tick=62 ko+- animation player anim=401 pose=808
+tick=62 ko+- overhead Bandit#28415(id=737) text="I'll kill you for that!"
+tick=63 ko+- graphic player graphic=245
+tick=63 ko+- hitsplat player amount=4
+tick=63 ko+- interacting player -> none
+tick=63 ko+- interacting Bandit#28415(id=737) -> player
+tick=63 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=64 ko+- animation player anim=-1 pose=808
+tick=65 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=66 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=66 ko+- hitsplat player amount=0
+tick=66 ko+- interacting player -> Bandit#28415(id=737)
+tick=66 ko+- animation player anim=1156 pose=808
+tick=66 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=67 ko+- interacting player -> none
+tick=68 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=68 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=68 ko+- interacting player -> Bandit#28415(id=737)
+tick=69 ko+- animation player anim=-1 pose=808
+tick=69 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=70 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=70 ko+- hitsplat player amount=0
+tick=70 ko+- animation player anim=1156 pose=808
+tick=70 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=71 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=72 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=72 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=73 ko+- animation player anim=-1 pose=808
+tick=73 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=74 ko+- chat type=GAMEMESSAGE matched=false msg="You can't knock-out the bandit during combat."
+tick=74 ko+- hitsplat player amount=0
+tick=74 ko+- animation player anim=1156 pose=808
+tick=74 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=75 ko+- chat type=GAMEMESSAGE matched=false msg="You can't pickpocket during combat."
+tick=76 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=76 ko+- interacting player -> none
+tick=77 ko+- animation player anim=-1 pose=808
+tick=78 ko+- hitsplat player amount=0
+tick=78 ko+- interacting player -> Bandit#28415(id=737)
+tick=78 ko+- animation player anim=401 pose=808
+tick=78 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=79 ko+- hitsplat Bandit#28415(id=737) amount=7
+tick=80 ko+- animation player anim=-1 pose=808
+tick=80 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=82 ko+- hitsplat player amount=0
+tick=82 ko+- animation player anim=401 pose=808
+tick=82 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=83 ko+- hitsplat Bandit#28415(id=737) amount=0
+tick=84 ko+- animation player anim=-1 pose=808
+tick=84 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=86 ko+- hitsplat player amount=0
+tick=86 ko+- animation player anim=401 pose=808
+tick=86 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=87 ko+- hitsplat Bandit#28415(id=737) amount=4
+tick=88 ko+- animation player anim=-1 pose=808
+tick=88 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=90 ko+- hitsplat player amount=0
+tick=90 ko+- animation player anim=401 pose=808
+tick=90 ko+- graphic Bandit#28415(id=737) graphic=348
+tick=90 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=91 ko+- hitsplat Bandit#28415(id=737) amount=5
+tick=92 ko+- animation player anim=-1 pose=808
+tick=92 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=94 ko+- animation player anim=401 pose=808
+tick=94 ko+- graphic Bandit#28415(id=737) graphic=348
+tick=94 ko+- animation Bandit#28415(id=737) anim=398 pose=808
+tick=95 ko+- hitsplat Bandit#28415(id=737) amount=6
+tick=96 ko+- animation player anim=-1 pose=808
+tick=97 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=98 ko+- hitsplat player amount=0
+tick=98 ko+- animation player anim=401 pose=808
+tick=98 ko+- graphic Bandit#28415(id=737) graphic=348
+tick=98 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=99 ko+- hitsplat Bandit#28415(id=737) amount=7
+tick=100 ko+- animation player anim=-1 pose=808
+tick=100 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=100 ko+- interacting player -> none
+tick=100 ko+- interacting Bandit#28415(id=737) -> none
+tick=100 ko+- animation Bandit#28415(id=737) anim=836 pose=808
+tick=151 ko+- animation Bandit#28415(id=737) anim=-1 pose=-1
+tick=165 ko+- interacting player -> none
+tick=166 ko+- interacting player -> none
+tick=174 ko+- interacting player -> Bandit#28415(id=737)
+tick=175 ko+- interacting Bandit#28420(id=737) -> player
+tick=176 ko+- hitsplat player amount=0
+tick=176 ko+- interacting player -> Bandit#28420(id=737)
+tick=176 ko+- animation player anim=1156 pose=808
+tick=176 ko+- interacting Bandit#28420(id=737) -> player
+tick=176 ko+- animation Bandit#28420(id=737) anim=395 pose=819
+tick=178 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=178 ko+- animation player anim=401 pose=808
+tick=178 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=179 ko+- hitsplat Bandit#28420(id=737) amount=1
+tick=180 ko+- animation player anim=-1 pose=808
+tick=180 ko+- hitsplat player amount=0
+tick=180 ko+- animation player anim=1156 pose=808
+tick=180 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=182 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=182 ko+- animation player anim=401 pose=808
+tick=182 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=183 ko+- hitsplat Bandit#28420(id=737) amount=0
+tick=184 ko+- animation player anim=-1 pose=808
+tick=184 ko+- hitsplat player amount=0
+tick=184 ko+- animation player anim=1156 pose=808
+tick=184 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=186 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=186 ko+- animation player anim=401 pose=808
+tick=186 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=187 ko+- hitsplat Bandit#28420(id=737) amount=0
+tick=188 ko+- animation player anim=-1 pose=808
+tick=188 ko+- hitsplat player amount=0
+tick=188 ko+- animation player anim=1156 pose=808
+tick=188 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=190 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=190 ko+- animation player anim=401 pose=808
+tick=190 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=191 ko+- hitsplat Bandit#28420(id=737) amount=5
+tick=192 ko+- animation player anim=-1 pose=808
+tick=192 ko+- hitsplat player amount=0
+tick=192 ko+- animation player anim=1156 pose=808
+tick=192 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=194 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=194 ko+- animation player anim=401 pose=808
+tick=194 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=195 ko+- hitsplat Bandit#28420(id=737) amount=0
+tick=196 ko+- animation player anim=-1 pose=808
+tick=196 ko+- hitsplat player amount=1
+tick=196 ko+- animation player anim=1156 pose=808
+tick=196 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=198 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=198 ko+- animation player anim=401 pose=808
+tick=198 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=199 ko+- hitsplat Bandit#28420(id=737) amount=2
+tick=200 ko+- animation player anim=-1 pose=808
+tick=200 ko+- hitsplat player amount=0
+tick=200 ko+- animation player anim=1156 pose=808
+tick=200 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=202 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=202 ko+- animation player anim=401 pose=808
+tick=202 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=203 ko+- hitsplat Bandit#28420(id=737) amount=1
+tick=204 ko+- animation player anim=-1 pose=808
+tick=204 ko+- hitsplat player amount=0
+tick=204 ko+- animation player anim=1156 pose=808
+tick=204 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=206 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=206 ko+- animation player anim=401 pose=808
+tick=206 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=207 ko+- hitsplat Bandit#28420(id=737) amount=8
+tick=208 ko+- animation player anim=-1 pose=808
+tick=208 ko+- hitsplat player amount=0
+tick=208 ko+- animation player anim=1156 pose=808
+tick=208 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=210 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=210 ko+- animation player anim=401 pose=808
+tick=210 ko+- graphic Bandit#28420(id=737) graphic=348
+tick=210 ko+- animation Bandit#28420(id=737) anim=398 pose=808
+tick=211 ko+- hitsplat Bandit#28420(id=737) amount=10
+tick=212 ko+- animation player anim=-1 pose=808
+tick=213 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=214 ko+- hitsplat player amount=0
+tick=214 ko+- animation player anim=401 pose=808
+tick=214 ko+- animation Bandit#28420(id=737) anim=395 pose=808
+tick=215 ko+- hitsplat Bandit#28420(id=737) amount=4
+tick=216 ko+- animation player anim=-1 pose=808
+tick=216 ko+- animation Bandit#28420(id=737) anim=-1 pose=808
+tick=216 ko+- interacting player -> none
+tick=216 ko+- interacting Bandit#28420(id=737) -> none
+tick=216 ko+- animation Bandit#28420(id=737) anim=836 pose=808
+tick=260 ko+- interacting player -> Bandit#28415(id=737)
+tick=261 ko+- interacting player -> none
+tick=262 ko+- interacting player -> none
+tick=262 ko+- interacting Bandit#28415(id=737) -> player
+tick=267 ko+- interacting player -> Bandit#28415(id=737)
+tick=267 ko+- animation Bandit#28420(id=737) anim=-1 pose=-1
+tick=268 ko+- interacting player -> none
+tick=268 ko+- interacting Bandit#28415(id=737) -> player
+tick=269 ko+- interacting player -> none
+tick=274 ko+- interacting player -> none
+tick=275 ko+- interacting Bandit#28415(id=737) -> player
+tick=279 ko+- interacting Bandit#28415(id=737) -> player
+tick=281 ko+- interacting Bandit#28415(id=737) -> player
+tick=285 ko+- interacting player -> none
+tick=285 ko+- interacting Bandit#28415(id=737) -> player
+tick=288 ko+- chat type=SPAM matched=false msg="Your blow only glances off the bandit's head."
+tick=288 ko+- interacting player -> Bandit#28415(id=737)
+tick=288 ko+- animation player anim=401 pose=808
+tick=288 ko+- overhead Bandit#28415(id=737) text="I'll kill you for that!"
+tick=289 ko+- graphic player graphic=245
+tick=289 ko+- hitsplat player amount=4
+tick=289 ko+- interacting player -> none
+tick=289 ko+- animation Bandit#28415(id=737) anim=395 pose=808
+tick=290 ko+- animation player anim=-1 pose=808
+tick=291 ko+- animation Bandit#28415(id=737) anim=-1 pose=808
+tick=291 ko+- interacting player -> Bandit#28415(id=737)
+tick=291 ko+- animation player anim=401 pose=808
+tick=291 ko+- animation Bandit#28415(id=737) anim=838 pose=808
+tick=292 ko+- chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=292 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=296
+tick=292 ko+0 interacting player -> none
+tick=292 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=292 ko+0 interacting Bandit#28415(id=737) -> none
+tick=293 ko+1 animation player anim=-1 pose=808
+tick=293 ko+1 interacting player -> none
+tick=294 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=294 ko+2 interacting player -> Bandit#28415(id=737)
+tick=295 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=295 ko+3 interacting player -> none
+tick=295 ko+3 animation player anim=827 pose=819
+tick=296 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=297 ko+5 animation player anim=-1 pose=808
+tick=297 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=297 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=298 ko+6 interacting player -> Bandit#28415(id=737)
+tick=298 ko+6 animation player anim=401 pose=808
+tick=298 ko+6 animation Bandit#28415(id=737) anim=838 pose=808
+tick=299 ko+7 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=299 ko+7 previous knockout was 7 ticks ago
+tick=299 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=303
+tick=299 ko+0 interacting player -> none
+tick=299 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=300 ko+1 animation player anim=-1 pose=808
+tick=301 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=301 ko+2 interacting player -> Bandit#28415(id=737)
+tick=302 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=302 ko+3 interacting player -> none
+tick=302 ko+3 animation player anim=827 pose=808
+tick=303 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=304 ko+5 animation player anim=-1 pose=808
+tick=304 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=304 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=305 ko+6 interacting player -> Bandit#28415(id=737)
+tick=305 ko+6 animation player anim=401 pose=808
+tick=305 ko+6 animation Bandit#28415(id=737) anim=838 pose=808
+tick=306 ko+7 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=306 ko+7 previous knockout was 7 ticks ago
+tick=306 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=310
+tick=306 ko+0 interacting player -> none
+tick=306 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=307 ko+1 animation player anim=-1 pose=808
+tick=307 ko+1 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=307 ko+1 interacting player -> Bandit#28415(id=737)
+tick=308 ko+2 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=308 ko+2 interacting player -> none
+tick=308 ko+2 animation player anim=827 pose=808
+tick=310 ko+4 animation player anim=-1 pose=808
+tick=310 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=311 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=311 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=312 ko+6 interacting player -> Bandit#28415(id=737)
+tick=312 ko+6 animation player anim=401 pose=808
+tick=312 ko+6 animation Bandit#28415(id=737) anim=838 pose=808
+tick=312 ko+6 pose Bandit#28415(id=737) pose=821 (was 808)
+tick=313 ko+7 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=313 ko+7 previous knockout was 7 ticks ago
+tick=313 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=819 duration=4 wakeTick=317
+tick=313 ko+0 interacting player -> none
+tick=313 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=314 ko+1 animation player anim=-1 pose=823
+tick=314 ko+1 pose Bandit#28415(id=737) pose=808 (was 819)
+tick=315 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=315 ko+2 interacting player -> Bandit#28415(id=737)
+tick=316 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=316 ko+3 interacting player -> none
+tick=316 ko+3 animation player anim=827 pose=808
+tick=317 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=318 ko+5 animation player anim=-1 pose=808
+tick=318 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=318 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=320 ko+7 interacting player -> Bandit#28415(id=737)
+tick=320 ko+7 animation player anim=401 pose=808
+tick=320 ko+7 animation Bandit#28415(id=737) anim=838 pose=808
+tick=320 ko+7 pose Bandit#28415(id=737) pose=821 (was 808)
+tick=321 ko+8 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=321 ko+8 previous knockout was 8 ticks ago
+tick=321 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=819 duration=4 wakeTick=325
+tick=321 ko+0 interacting player -> none
+tick=321 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=322 ko+1 animation player anim=-1 pose=808
+tick=322 ko+1 pose Bandit#28415(id=737) pose=808 (was 819)
+tick=323 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=323 ko+2 interacting player -> Bandit#28415(id=737)
+tick=324 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=324 ko+3 interacting player -> none
+tick=324 ko+3 animation player anim=827 pose=808
+tick=325 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=326 ko+5 animation player anim=-1 pose=808
+tick=326 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=326 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=327 ko+6 interacting player -> Bandit#28415(id=737)
+tick=327 ko+6 animation player anim=401 pose=808
+tick=327 ko+6 animation Bandit#28415(id=737) anim=838 pose=808
+tick=328 ko+7 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=328 ko+7 previous knockout was 7 ticks ago
+tick=328 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=332
+tick=328 ko+0 interacting player -> none
+tick=328 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=329 ko+1 animation player anim=-1 pose=808
+tick=329 ko+1 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=329 ko+1 interacting player -> Bandit#28415(id=737)
+tick=330 ko+2 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=330 ko+2 interacting player -> none
+tick=330 ko+2 animation player anim=827 pose=808
+tick=332 ko+4 animation player anim=-1 pose=808
+tick=332 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=333 ko+5 interacting player -> Bandit#28415(id=737)
+tick=333 ko+5 animation player anim=401 pose=808
+tick=333 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=334 ko+6 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=334 ko+6 previous knockout was 6 ticks ago
+tick=334 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=338
+tick=334 ko+0 interacting player -> none
+tick=334 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=335 ko+1 animation player anim=-1 pose=823
+tick=336 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=336 ko+2 interacting player -> Bandit#28415(id=737)
+tick=337 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=337 ko+3 interacting player -> none
+tick=337 ko+3 animation player anim=827 pose=808
+tick=338 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=339 ko+5 animation player anim=-1 pose=808
+tick=339 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=339 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=340 ko+6 chat type=SPAM matched=false msg="Your blow only glances off the bandit's head."
+tick=340 ko+6 interacting player -> Bandit#28415(id=737)
+tick=340 ko+6 animation player anim=401 pose=808
+tick=340 ko+6 overhead Bandit#28415(id=737) text="I'll kill you for that!"
+tick=341 ko+7 graphic player graphic=245
+tick=341 ko+7 hitsplat player amount=4
+tick=341 ko+7 interacting player -> none
+tick=341 ko+7 interacting Bandit#28415(id=737) -> player
+tick=341 ko+7 animation Bandit#28415(id=737) anim=395 pose=808
+tick=341 ko+7 pose Bandit#28415(id=737) pose=819 (was 808)
+tick=342 ko+8 animation player anim=-1 pose=823
+tick=343 ko+9 animation Bandit#28415(id=737) anim=-1 pose=808
+tick=343 ko+9 interacting player -> Bandit#28415(id=737)
+tick=343 ko+9 animation player anim=401 pose=808
+tick=343 ko+9 animation Bandit#28415(id=737) anim=838 pose=808
+tick=343 ko+9 pose Bandit#28415(id=737) pose=808 (was 819)
+tick=344 ko+10 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=344 ko+10 previous knockout was 10 ticks ago
+tick=344 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=348
+tick=344 ko+0 interacting player -> none
+tick=344 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=344 ko+0 interacting Bandit#28415(id=737) -> none
+tick=345 ko+1 animation player anim=-1 pose=808
+tick=346 ko+2 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=346 ko+2 interacting player -> Bandit#28415(id=737)
+tick=347 ko+3 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=347 ko+3 interacting player -> none
+tick=347 ko+3 animation player anim=827 pose=808
+tick=348 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=349 ko+5 animation player anim=-1 pose=808
+tick=349 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=349 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=350 ko+6 interacting player -> Bandit#28415(id=737)
+tick=350 ko+6 animation player anim=401 pose=808
+tick=350 ko+6 animation Bandit#28415(id=737) anim=838 pose=808
+tick=351 ko+7 chat type=SPAM matched=true msg="You smack the bandit over the head and render them unconscious."
+tick=351 ko+7 previous knockout was 7 ticks ago
+tick=351 ko+0 KNOCKOUT target=Bandit#28415(id=737) (interacting=Bandit#28415(id=737)) anim=838 pose=808 duration=4 wakeTick=355
+tick=351 ko+0 interacting player -> none
+tick=351 ko+0 overhead Bandit#28415(id=737) text="Zzzzzz"
+tick=352 ko+1 animation player anim=-1 pose=808
+tick=352 ko+1 chat type=SPAM matched=false msg="You attempt to pick the bandit's pocket."
+tick=352 ko+1 interacting player -> Bandit#28415(id=737)
+tick=353 ko+2 chat type=SPAM matched=false msg="You pick the bandit's pocket."
+tick=353 ko+2 interacting player -> none
+tick=353 ko+2 animation player anim=827 pose=808
+tick=355 ko+4 animation player anim=-1 pose=808
+tick=355 ko+4 countdown expired, plugin now shows Bandit#28415(id=737) as awake
+tick=356 ko+5 overhead Bandit#28415(id=737) text="Arghh my head."
+tick=356 ko+5 animation Bandit#28415(id=737) anim=808 pose=808
+tick=365 ko+14 animation Bandit#28415(id=737) anim=-1 pose=808

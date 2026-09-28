@@ -13,7 +13,12 @@
 - [com.oveduumnakal.betterblackjacking.Blackjacks](#comoveduumnakalbetterblackjackingblackjacks)
 - [com.oveduumnakal.betterblackjacking.Changelog](#comoveduumnakalbetterblackjackingchangelog)
 - [com.oveduumnakal.betterblackjacking.Changelog.Release](#comoveduumnakalbetterblackjackingchangelogrelease)
+- [com.oveduumnakal.betterblackjacking.ChatSignals](#comoveduumnakalbetterblackjackingchatsignals)
+- [com.oveduumnakal.betterblackjacking.ChatSignals.Message](#comoveduumnakalbetterblackjackingchatsignalsmessage)
+- [com.oveduumnakal.betterblackjacking.ChatSignals.Overhead](#comoveduumnakalbetterblackjackingchatsignalsoverhead)
 - [com.oveduumnakal.betterblackjacking.DebugLog](#comoveduumnakalbetterblackjackingdebuglog)
+- [com.oveduumnakal.betterblackjacking.KnockoutTracker](#comoveduumnakalbetterblackjackingknockouttracker)
+- [com.oveduumnakal.betterblackjacking.PickpocketBudget](#comoveduumnakalbetterblackjackingpickpocketbudget)
 - [com.oveduumnakal.betterblackjacking.PickpocketIndicatorOverlay](#comoveduumnakalbetterblackjackingpickpocketindicatoroverlay)
 - [com.oveduumnakal.betterblackjacking.Pollnivneach](#comoveduumnakalbetterblackjackingpollnivneach)
 - [com.oveduumnakal.betterblackjacking.SubTickClock](#comoveduumnakalbetterblackjackingsubtickclock)
@@ -887,6 +892,277 @@ One release: its version, written-out date, and the raw markdown body beneath it
 
 ---
 
+## com.oveduumnakal.betterblackjacking.ChatSignals
+
+_class_
+
+`public final class ChatSignals`
+
+Classifies the chat messages and overhead texts that drive the knock-out tracker (PLAN §3.4).
+
+<p>Only bandit messages have been captured so far, so every pattern that names the NPC captures
+the noun as group 1 instead of hard-coding "bandit". Colour tags such as `<col=ff0000>` are
+stripped before matching, and a message must match in full.
+
+### Nested Type Summary
+
+| Type | Description |
+|---|---|
+| _enum_ [`Message`](#comoveduumnakalbetterblackjackingchatsignalsmessage) | A chat-box message from the game that the tracker reacts to. |
+| _enum_ [`Overhead`](#comoveduumnakalbetterblackjackingchatsignalsoverhead) | An overhead text said by a blackjack target that the tracker reacts to. |
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private static final Pattern` | `TAG` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `ChatSignals()` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public static Message` | `classifyMessage(String message)` | Finds which tracked message a chat message is. |
+| `public static Overhead` | `classifyOverhead(String text)` | Finds which tracked overhead text an NPC said. |
+| `private static String` | `clean(String text)` |  |
+| `public static String` | `npcNoun(String message)` | The NPC noun a tracked message names, e.g. |
+
+### Field Detail
+
+#### TAG
+
+`private static final Pattern TAG`
+
+### Constructor Detail
+
+#### ChatSignals
+
+`private ChatSignals()`
+
+### Method Detail
+
+#### classifyMessage
+
+`public static Message classifyMessage(String message)`
+
+Finds which tracked message a chat message is.
+
+- **Parameter** `message` — the raw chat message, tags allowed
+- **Returns:** the matching message, or `null` if it isn't one the tracker uses
+
+#### classifyOverhead
+
+`public static Overhead classifyOverhead(String text)`
+
+Finds which tracked overhead text an NPC said.
+
+- **Parameter** `text` — the raw overhead text, tags allowed
+- **Returns:** the matching overhead, or `null` if it isn't one the tracker uses
+
+#### clean
+
+`private static String clean(String text)`
+
+#### npcNoun
+
+`public static String npcNoun(String message)`
+
+The NPC noun a tracked message names, e.g. `bandit`, for logging and verification.
+
+- **Parameter** `message` — the raw chat message, tags allowed
+- **Returns:** the captured noun, or `null` if the message isn't tracked or names no NPC
+
+---
+
+## com.oveduumnakal.betterblackjacking.ChatSignals.Message
+
+_enum_
+
+`public enum Message`
+
+A chat-box message from the game that the tracker reacts to.
+
+### Enum Constant Summary
+
+| Enum Constant | Description |
+|---|---|
+| `ALREADY_UNCONSCIOUS` | The player tried to knock out a target that is already unconscious. |
+| `KNOCKOUT_FAILED` | The knock-out failed, and the target is about to attack the player. |
+| `KNOCKOUT_IN_COMBAT` | The player tried to knock out a target while in combat. |
+| `KNOCKOUT_SUCCESS` | The knock-out landed: the target is unconscious from this tick. |
+| `PICKPOCKET_IN_COMBAT` | The player tried to pickpocket while in combat. |
+| `PICKPOCKET_LANDED` | A pickpocket landed, on tick `A + 1`. |
+| `PICKPOCKET_PROCESSED` | The game processed a pickpocket, on tick `A`. |
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final Pattern` | `pattern` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `Message(String regex)` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public Pattern` | `pattern()` | The pattern a message must match in full. |
+
+### Enum Constant Detail
+
+#### ALREADY_UNCONSCIOUS
+
+`ALREADY_UNCONSCIOUS`
+
+The player tried to knock out a target that is already unconscious.
+
+#### KNOCKOUT_FAILED
+
+`KNOCKOUT_FAILED`
+
+The knock-out failed, and the target is about to attack the player.
+
+#### KNOCKOUT_IN_COMBAT
+
+`KNOCKOUT_IN_COMBAT`
+
+The player tried to knock out a target while in combat.
+
+#### KNOCKOUT_SUCCESS
+
+`KNOCKOUT_SUCCESS`
+
+The knock-out landed: the target is unconscious from this tick.
+
+#### PICKPOCKET_IN_COMBAT
+
+`PICKPOCKET_IN_COMBAT`
+
+The player tried to pickpocket while in combat.
+
+#### PICKPOCKET_LANDED
+
+`PICKPOCKET_LANDED`
+
+A pickpocket landed, on tick `A + 1`.
+
+#### PICKPOCKET_PROCESSED
+
+`PICKPOCKET_PROCESSED`
+
+The game processed a pickpocket, on tick `A`.
+
+### Field Detail
+
+#### pattern
+
+`private final Pattern pattern`
+
+### Constructor Detail
+
+#### Message
+
+`Message(String regex)`
+
+### Method Detail
+
+#### pattern
+
+`public Pattern pattern()`
+
+The pattern a message must match in full. Group 1, where present, is the NPC's noun.
+
+- **Returns:** the compiled pattern
+
+---
+
+## com.oveduumnakal.betterblackjacking.ChatSignals.Overhead
+
+_enum_
+
+`public enum Overhead`
+
+An overhead text said by a blackjack target that the tracker reacts to.
+
+### Enum Constant Summary
+
+| Enum Constant | Description |
+|---|---|
+| `ANGRY` | Said after a failed knock-out, as the target starts attacking the player. |
+| `KNOCKED_OUT` | Said on the knock-out tick; it confirms which NPC was knocked out. |
+| `WAKING_UP` | Said on the tick the target wakes up. |
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final String` | `text` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `Overhead(String text)` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public String` | `text()` | The exact overhead text. |
+
+### Enum Constant Detail
+
+#### ANGRY
+
+`ANGRY`
+
+Said after a failed knock-out, as the target starts attacking the player.
+
+#### KNOCKED_OUT
+
+`KNOCKED_OUT`
+
+Said on the knock-out tick; it confirms which NPC was knocked out.
+
+#### WAKING_UP
+
+`WAKING_UP`
+
+Said on the tick the target wakes up.
+
+### Field Detail
+
+#### text
+
+`private final String text`
+
+### Constructor Detail
+
+#### Overhead
+
+`Overhead(String text)`
+
+### Method Detail
+
+#### text
+
+`public String text()`
+
+The exact overhead text.
+
+- **Returns:** the text, without tags
+
+---
+
 ## com.oveduumnakal.betterblackjacking.DebugLog
 
 _class_
@@ -1132,6 +1408,451 @@ Records the tick of the latest knock-out, so later lines show `ko+` the ticks si
 #### writeToLog
 
 `private static void writeToLog(String line)`
+
+---
+
+## com.oveduumnakal.betterblackjacking.KnockoutTracker
+
+_class_
+
+`public final class KnockoutTracker`
+
+Tracks which blackjack targets are knocked out or attacking the player, and how many guaranteed
+pickpockets are left (PLAN §4).
+
+<p>It holds no RuneLite `Client`, NPC or event objects: NPCs are identified by their index
+and every method takes plain values, so the plugin translates events into these calls and tests
+can replay recorded sessions. Every event method takes the game tick it happened on, and a newer
+tick than the tracker has seen advances it as `#onTick(int)` would, so events and the tick
+can arrive in either order within a tick.
+
+<p>One target is knocked out at a time: `TargetState#SAFE` while another pickpocket will
+land, then `TargetState#WAKING`, then `TargetState#KNOCK_OUT` on the wake tick or
+earlier if the game says it woke. Any number of targets can be `TargetState#ATTACKING`.
+Every other NPC is `TargetState#KNOCK_OUT`.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `public static final int` | `ATTACKING_EXIT_TICKS` | An attacking target goes back to knock-out after this many ticks without interacting with the player. |
+| `public static final int` | `DEFAULT_KNOCK_OUT_TICKS` | How many ticks a knocked-out target stays down by default: knocked out at T, awake at T+5. |
+| `public static final int` | `MAX_PICKPOCKETS` | At most this many guaranteed pickpockets fit into one knock-out. |
+| `public static final int` | `NO_NPC` | The NPC index meaning "no NPC". |
+| `public static final int` | `NO_TICK` | The tick meaning "no knock-out". |
+| `public static final int` | `PICKPOCKET_INTERVAL` | Consecutive pickpockets are processed at least this many ticks apart. |
+| `public static final int` | `PICKPOCKET_LANDING_DELAY` | A pickpocket lands this many ticks after the game processes it. |
+| `private static final int` | `UNSET` |  |
+| `private final Map<Integer,Integer>` | `attackingSeenTick` |  |
+| `private PickpocketBudget` | `budget` |  |
+| `private int` | `currentTick` |  |
+| `private final Set<Integer>` | `interactingWithPlayer` |  |
+| `private int` | `knockOutTicks` |  |
+| `private int` | `knockedOutNpc` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `private void` | `clearKnockOut()` |  |
+| `public int` | `currentTick()` | The latest tick the tracker has seen. |
+| `public int` | `knockOutTick()` | The tick the current knock-out landed on. |
+| `public int` | `knockOutTicks()` | How many ticks the next knock-out will last. |
+| `public int` | `knockedOutNpcIndex()` | The index of the knocked-out NPC. |
+| `private void` | `markAttacking(int npcIndex, int tick)` |  |
+| `public void` | `onChat(int tick, ChatMessageType type, String message, int interactingNpcIndex)` | Handles a chat message. |
+| `public void` | `onDespawn(int npcIndex)` | Forgets an NPC that despawned, ending its knock-out if it was knocked out. |
+| `public void` | `onNpcAnimation(int tick, int npcIndex, int animationId)` | Handles an NPC's animation change. |
+| `public void` | `onNpcInteracting(int tick, int npcIndex, boolean targetsPlayer)` | Records whether an NPC is interacting with the local player. |
+| `public void` | `onOverhead(int tick, int npcIndex, String text)` | Handles an NPC's overhead text. |
+| `public void` | `onPlayerHitsplat(int tick)` | Handles a hitsplat on the local player: every NPC currently interacting with the player becomes `TargetState#ATTACKING`. |
+| `public void` | `onTick(int tick)` | Advances to a game tick: ends a knock-out whose wake tick has come, and returns attacking targets to knock-out once they haven't interacted with the player for `#ATTACKING_EXIT_TICKS` ticks. |
+| `public int` | `pickpocketsLeft()` | How many more guaranteed pickpockets will land on the knocked-out target, at the latest tick the tracker has seen. |
+| `public int` | `pickpocketsLeft(int currentTick)` | How many more guaranteed pickpockets will land on the knocked-out target if the player clicks during `currentTick` (PLAN §4.3). |
+| `public void` | `reset()` | Clears everything, e.g. |
+| `public void` | `setKnockOutTicks(int ticks)` | Sets how many ticks a knocked-out target stays down. |
+| `private void` | `setKnockedOutNpc(int npcIndex)` |  |
+| `public TargetState` | `stateOf(int npcIndex)` | The state to draw an NPC in, at the latest tick the tracker has seen. |
+| `private void` | `wake(int npcIndex)` |  |
+| `public int` | `wakeTick()` | The tick the knocked-out NPC wakes on, which the timer counts down to (PLAN §4.4). |
+
+### Field Detail
+
+#### ATTACKING_EXIT_TICKS
+
+`public static final int ATTACKING_EXIT_TICKS`
+
+An attacking target goes back to knock-out after this many ticks without interacting with the player.
+
+#### DEFAULT_KNOCK_OUT_TICKS
+
+`public static final int DEFAULT_KNOCK_OUT_TICKS`
+
+How many ticks a knocked-out target stays down by default: knocked out at T, awake at T+5.
+
+#### MAX_PICKPOCKETS
+
+`public static final int MAX_PICKPOCKETS`
+
+At most this many guaranteed pickpockets fit into one knock-out.
+
+#### NO_NPC
+
+`public static final int NO_NPC`
+
+The NPC index meaning "no NPC".
+
+#### NO_TICK
+
+`public static final int NO_TICK`
+
+The tick meaning "no knock-out".
+
+#### PICKPOCKET_INTERVAL
+
+`public static final int PICKPOCKET_INTERVAL`
+
+Consecutive pickpockets are processed at least this many ticks apart.
+
+#### PICKPOCKET_LANDING_DELAY
+
+`public static final int PICKPOCKET_LANDING_DELAY`
+
+A pickpocket lands this many ticks after the game processes it.
+
+#### UNSET
+
+`private static final int UNSET`
+
+#### attackingSeenTick
+
+`private final Map<Integer,Integer> attackingSeenTick`
+
+#### budget
+
+`private PickpocketBudget budget`
+
+#### currentTick
+
+`private int currentTick`
+
+#### interactingWithPlayer
+
+`private final Set<Integer> interactingWithPlayer`
+
+#### knockOutTicks
+
+`private int knockOutTicks`
+
+#### knockedOutNpc
+
+`private int knockedOutNpc`
+
+### Method Detail
+
+#### clearKnockOut
+
+`private void clearKnockOut()`
+
+#### currentTick
+
+`public int currentTick()`
+
+The latest tick the tracker has seen.
+
+- **Returns:** the tick, or `Integer#MIN_VALUE` before the first tick and after `#reset()`
+
+#### knockOutTick
+
+`public int knockOutTick()`
+
+The tick the current knock-out landed on.
+
+- **Returns:** `T`, or `#NO_TICK` when nothing is knocked out
+
+#### knockOutTicks
+
+`public int knockOutTicks()`
+
+How many ticks the next knock-out will last.
+
+- **Returns:** the duration in ticks
+
+#### knockedOutNpcIndex
+
+`public int knockedOutNpcIndex()`
+
+The index of the knocked-out NPC.
+
+- **Returns:** the NPC index, or `#NO_NPC` when nothing is knocked out
+
+#### markAttacking
+
+`private void markAttacking(int npcIndex, int tick)`
+
+#### onChat
+
+`public void onChat(int tick, ChatMessageType type, String message, int interactingNpcIndex)`
+
+Handles a chat message. Only game messages (`GAMEMESSAGE` and `SPAM`) count.
+
+<ul>
+<li>A knock-out success starts a knock-out on `interactingNpcIndex`, which becomes
+`TargetState#SAFE`. If that is `#NO_NPC`, the `Zzzzzz` overhead names it.</li>
+<li>A failed knock-out or either "during combat" message makes `interactingNpcIndex`
+`TargetState#ATTACKING`.</li>
+<li>A processed pickpocket moves the earliest next pickpocket two ticks on.</li>
+</ul>
+
+- **Parameter** `tick` — the tick the message arrived on
+- **Parameter** `type` — the message's chat type
+- **Parameter** `message` — the raw message text
+- **Parameter** `interactingNpcIndex` — the index of the NPC the player is interacting with, or `#NO_NPC`
+
+#### onDespawn
+
+`public void onDespawn(int npcIndex)`
+
+Forgets an NPC that despawned, ending its knock-out if it was knocked out.
+
+- **Parameter** `npcIndex` — the index of the despawned NPC
+
+#### onNpcAnimation
+
+`public void onNpcAnimation(int tick, int npcIndex, int animationId)`
+
+Handles an NPC's animation change. The knocked-out NPC playing `HUMAN_READY` (808) is the
+game snapping it to standing, so the knock-out ends, as with `Arghh my head.`.
+
+- **Parameter** `tick` — the tick the animation changed on
+- **Parameter** `npcIndex` — the index of the NPC
+- **Parameter** `animationId` — the new animation ID
+
+#### onNpcInteracting
+
+`public void onNpcInteracting(int tick, int npcIndex, boolean targetsPlayer)`
+
+Records whether an NPC is interacting with the local player. The latest value holds until the
+next call, so call it whenever it changes, or every tick for the NPCs worth tracking.
+
+- **Parameter** `tick` — the current tick
+- **Parameter** `npcIndex` — the index of the NPC
+- **Parameter** `targetsPlayer` — whether the NPC's interacting target is the local player
+
+#### onOverhead
+
+`public void onOverhead(int tick, int npcIndex, String text)`
+
+Handles an NPC's overhead text.
+
+<ul>
+<li>`Zzzzzz` on the knock-out tick names the knocked-out NPC, overriding the interacting
+NPC the success message was credited to.</li>
+<li>`Arghh my head.` from the knocked-out NPC ends the knock-out.</li>
+<li>`I'll kill you for that!` makes the NPC `TargetState#ATTACKING`.</li>
+</ul>
+
+- **Parameter** `tick` — the tick the text appeared on
+- **Parameter** `npcIndex` — the index of the NPC that said it
+- **Parameter** `text` — the raw overhead text
+
+#### onPlayerHitsplat
+
+`public void onPlayerHitsplat(int tick)`
+
+Handles a hitsplat on the local player: every NPC currently interacting with the player becomes
+`TargetState#ATTACKING`. Hitsplats carry no source, so this relies on
+`#onNpcInteracting(int, int, boolean)`.
+
+- **Parameter** `tick` — the tick the hitsplat appeared on
+
+#### onTick
+
+`public void onTick(int tick)`
+
+Advances to a game tick: ends a knock-out whose wake tick has come, and returns attacking
+targets to knock-out once they haven't interacted with the player for
+`#ATTACKING_EXIT_TICKS` ticks. Calling it again with the same tick does nothing.
+
+- **Parameter** `tick` — the current game tick
+
+#### pickpocketsLeft
+
+`public int pickpocketsLeft()`
+
+How many more guaranteed pickpockets will land on the knocked-out target, at the latest tick
+the tracker has seen.
+
+- **Returns:** 0 to `#MAX_PICKPOCKETS`; 0 when nothing is knocked out
+
+#### pickpocketsLeft
+
+`public int pickpocketsLeft(int currentTick)`
+
+How many more guaranteed pickpockets will land on the knocked-out target if the player clicks
+during `currentTick` (PLAN §4.3).
+
+- **Parameter** `currentTick` — the tick to evaluate at
+- **Returns:** 0 to `#MAX_PICKPOCKETS`; 0 when nothing is knocked out
+
+#### reset
+
+`public void reset()`
+
+Clears everything, e.g. when the player logs out or hops, or the activation gate closes. The
+knock-out duration is kept.
+
+#### setKnockOutTicks
+
+`public void setKnockOutTicks(int ticks)`
+
+Sets how many ticks a knocked-out target stays down. It applies from the next knock-out.
+
+- **Parameter** `ticks` — the `knockOutTicks` config value; values below 1 count as 1
+
+#### setKnockedOutNpc
+
+`private void setKnockedOutNpc(int npcIndex)`
+
+#### stateOf
+
+`public TargetState stateOf(int npcIndex)`
+
+The state to draw an NPC in, at the latest tick the tracker has seen.
+
+- **Parameter** `npcIndex` — the index of the NPC
+- **Returns:** its state; NPCs the tracker knows nothing about are `TargetState#KNOCK_OUT`
+
+#### wake
+
+`private void wake(int npcIndex)`
+
+#### wakeTick
+
+`public int wakeTick()`
+
+The tick the knocked-out NPC wakes on, which the timer counts down to (PLAN §4.4).
+
+- **Returns:** `T + duration`, or `#NO_TICK` when nothing is knocked out
+
+---
+
+## com.oveduumnakal.betterblackjacking.PickpocketBudget
+
+_class_
+
+`public final class PickpocketBudget`
+
+How many guaranteed pickpockets still fit into one knock-out (PLAN §4.3).
+
+<p>A knock-out lands on tick `T` and the target wakes on `T + duration`. A pickpocket
+lands `KnockoutTracker#PICKPOCKET_LANDING_DELAY` tick after the game processes it and must land
+before the wake tick, so the last tick one can be processed is `wakeTick - 1 - landingDelay`.
+Pickpockets are processed at least `KnockoutTracker#PICKPOCKET_INTERVAL` ticks apart, the
+first no earlier than `T + 1`, and a click made during the current tick is processed next
+tick. The timing constants live in `KnockoutTracker`.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final int` | `knockOutTick` |  |
+| `private int` | `nextPickpocketTick` |  |
+| `private final int` | `wakeTick` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `PickpocketBudget(int knockOutTick, int knockOutTicks)` | Starts the budget for a knock-out. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public int` | `knockOutTick()` | The tick the knock-out landed on. |
+| `public int` | `lastSafeTick()` | The last tick a pickpocket can be processed on and still land before the target wakes. |
+| `public int` | `nextPickpocketTick()` | The earliest tick the player's next pickpocket can be processed on. |
+| `public void` | `onPickpocketProcessed(int tick)` | Records a pickpocket the game processed (`You attempt to pick the ...'s pocket.`). |
+| `public int` | `pickpocketsLeft(int currentTick)` | How many more pickpockets will land before the target wakes if the player clicks now. |
+| `public int` | `wakeTick()` | The tick the target wakes on, which the knock-out timer counts down to (PLAN §4.4). |
+
+### Field Detail
+
+#### knockOutTick
+
+`private final int knockOutTick`
+
+#### nextPickpocketTick
+
+`private int nextPickpocketTick`
+
+#### wakeTick
+
+`private final int wakeTick`
+
+### Constructor Detail
+
+#### PickpocketBudget
+
+`public PickpocketBudget(int knockOutTick, int knockOutTicks)`
+
+Starts the budget for a knock-out.
+
+- **Parameter** `knockOutTick` — the tick `T` the knock-out message arrived on
+- **Parameter** `knockOutTicks` — how many ticks the target stays down, at least 1
+
+### Method Detail
+
+#### knockOutTick
+
+`public int knockOutTick()`
+
+The tick the knock-out landed on.
+
+- **Returns:** `T`
+
+#### lastSafeTick
+
+`public int lastSafeTick()`
+
+The last tick a pickpocket can be processed on and still land before the target wakes.
+
+- **Returns:** `wakeTick - 1 - landingDelay`
+
+#### nextPickpocketTick
+
+`public int nextPickpocketTick()`
+
+The earliest tick the player's next pickpocket can be processed on.
+
+- **Returns:** `T + 1` before any pickpocket, otherwise the last processed tick plus the interval
+
+#### onPickpocketProcessed
+
+`public void onPickpocketProcessed(int tick)`
+
+Records a pickpocket the game processed (`You attempt to pick the ...'s pocket.`).
+
+- **Parameter** `tick` — the tick `A` the message arrived on; the next one can be processed at
+`A + interval`
+
+#### pickpocketsLeft
+
+`public int pickpocketsLeft(int currentTick)`
+
+How many more pickpockets will land before the target wakes if the player clicks now.
+
+- **Parameter** `currentTick` — the current game tick
+- **Returns:** 0 to `KnockoutTracker#MAX_PICKPOCKETS`
+
+#### wakeTick
+
+`public int wakeTick()`
+
+The tick the target wakes on, which the knock-out timer counts down to (PLAN §4.4).
+
+- **Returns:** `T + duration`
 
 ---
 
