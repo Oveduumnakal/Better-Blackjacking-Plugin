@@ -18,6 +18,7 @@
 - [com.oveduumnakal.betterblackjacking.ChatSignals.Overhead](#comoveduumnakalbetterblackjackingchatsignalsoverhead)
 - [com.oveduumnakal.betterblackjacking.DebugLog](#comoveduumnakalbetterblackjackingdebuglog)
 - [com.oveduumnakal.betterblackjacking.KnockoutTracker](#comoveduumnakalbetterblackjackingknockouttracker)
+- [com.oveduumnakal.betterblackjacking.OutlineOverlay](#comoveduumnakalbetterblackjackingoutlineoverlay)
 - [com.oveduumnakal.betterblackjacking.PickpocketBudget](#comoveduumnakalbetterblackjackingpickpocketbudget)
 - [com.oveduumnakal.betterblackjacking.PickpocketIndicatorOverlay](#comoveduumnakalbetterblackjackingpickpocketindicatoroverlay)
 - [com.oveduumnakal.betterblackjacking.Pollnivneach](#comoveduumnakalbetterblackjackingpollnivneach)
@@ -1734,6 +1735,77 @@ The state to draw an NPC in, at the latest tick the tracker has seen.
 The tick the knocked-out NPC wakes on, which the timer counts down to (PLAN §4.4).
 
 - **Returns:** `T + duration`, or `#NO_TICK` when nothing is knocked out
+
+---
+
+## com.oveduumnakal.betterblackjacking.OutlineOverlay
+
+_class_
+
+`public class OutlineOverlay`
+
+Outlines each eligible blackjack target's click box in the colour of its state, so the player can
+see at a glance whether to pickpocket, get ready, knock out or break combat.
+
+<p>The click box is the NPC's convex hull. It is stroked at the configured outline width and filled
+with the same colour at the configured fill opacity. Nothing is drawn while the plugin is inactive,
+and a target without a hull (e.g. off-screen) is skipped.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final BetterBlackjackingConfig` | `config` |  |
+| `private final TargetStateView` | `view` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `OutlineOverlay(TargetStateView view, BetterBlackjackingConfig config)` | Creates the overlay, drawn above the scene at each target's own position. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `private static int` | `clampAlpha(int alpha)` |  |
+| `public Dimension` | `render(Graphics2D graphics)` | Outlines every eligible target's click box in its state colour. |
+
+### Field Detail
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+#### view
+
+`private final TargetStateView view`
+
+### Constructor Detail
+
+#### OutlineOverlay
+
+`public OutlineOverlay(TargetStateView view, BetterBlackjackingConfig config)`
+
+Creates the overlay, drawn above the scene at each target's own position.
+
+- **Parameter** `view` — the plugin state to draw
+- **Parameter** `config` — the plugin config, for the outline width and fill opacity
+
+### Method Detail
+
+#### clampAlpha
+
+`private static int clampAlpha(int alpha)`
+
+#### render
+
+`public Dimension render(Graphics2D graphics)`
+
+Outlines every eligible target's click box in its state colour.
+
+- **Parameter** `graphics` — the graphics to draw with
+- **Returns:** always `null`, since a dynamic overlay has no bounds of its own
 
 ---
 
