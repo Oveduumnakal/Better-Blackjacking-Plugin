@@ -49,8 +49,8 @@ import static org.mockito.Mockito.when;
 public class DebugLogTest
 {
 	private static final String[] FIXTURES = {
-		"planning/fixtures/session1-bandit.log",
-		"planning/fixtures/session2-bandit.log",
+		"src/test/resources/fixtures/session1-bandit.log",
+		"src/test/resources/fixtures/session2-bandit.log",
 	};
 	private static final String BANDIT = DebugLog.describe("Bandit", 28415, 737);
 	private static final String OTHER_BANDIT = DebugLog.describe("Bandit", 28420, 737);
