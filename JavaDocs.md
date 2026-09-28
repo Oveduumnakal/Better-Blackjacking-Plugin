@@ -10,6 +10,7 @@
 - [com.oveduumnakal.betterblackjacking.BetterBlackjackingPlugin](#comoveduumnakalbetterblackjackingbetterblackjackingplugin)
 - [com.oveduumnakal.betterblackjacking.Changelog](#comoveduumnakalbetterblackjackingchangelog)
 - [com.oveduumnakal.betterblackjacking.Changelog.Release](#comoveduumnakalbetterblackjackingchangelogrelease)
+- [com.oveduumnakal.betterblackjacking.DebugLog](#comoveduumnakalbetterblackjackingdebuglog)
 - [com.oveduumnakal.betterblackjacking.SubTickClock](#comoveduumnakalbetterblackjackingsubtickclock)
 - [com.oveduumnakal.betterblackjacking.TargetState](#comoveduumnakalbetterblackjackingtargetstate)
 - [com.oveduumnakal.betterblackjacking.TargetStateView](#comoveduumnakalbetterblackjackingtargetstateview)
@@ -495,6 +496,254 @@ One release: its version, written-out date, and the raw markdown body beneath it
 #### version
 
 `String version`
+
+---
+
+## com.oveduumnakal.betterblackjacking.DebugLog
+
+_class_
+
+`final class DebugLog`
+
+Writes tuning lines to the client log while the `debugLogging` setting is on.
+
+<p>Every line has the form `[BetterBlackjacking] tick=<n> ko+<offset> <message>`, where
+`<offset>` is the number of ticks since the last knock-out, or `-` before the first
+one. Without the tag, a line matches the fixtures in `planning/fixtures/`, so a recorded
+session can be added as a fixture directly.
+
+<p>When the setting is off, every method returns after reading the setting: nothing is formatted,
+the tick is not read and nothing is logged. Callers that build arguments with `#describe`
+can check `#isEnabled()` first to skip that work too.
+
+<p>The plugin records the knock-out tick with `#setKnockoutTick(int)` whether or not
+logging is on. To match the fixtures, it logs the knock-out chat line before calling it (so the
+chat line shows the previous offset) and the `#knockout` line after (so it shows
+`ko+0`).
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `static final String` | `NONE` | How a missing actor, such as an interaction target of `null`, is described in a line. |
+| `static final String` | `PLAYER` | How the local player is described in a line. |
+| `static final String` | `TAG` | The tag every line starts with. |
+| `private final BetterBlackjackingConfig` | `config` |  |
+| `private boolean` | `knockedOut` |  |
+| `private int` | `knockoutTick` |  |
+| `private final Consumer<String>` | `sink` |  |
+| `private final IntSupplier` | `tickSupplier` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `DebugLog(BetterBlackjackingConfig config, IntSupplier tickSupplier)` | Creates a debug log that writes to the plugin's SLF4J logger at INFO. |
+| `DebugLog(BetterBlackjackingConfig config, IntSupplier tickSupplier, Consumer<String> sink)` | Creates a debug log that writes each finished line to `sink`. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `void` | `animation(String actor, int animation, int pose)` | Logs an actor's animation change: `animation player anim=401 pose=808`. |
+| `void` | `chat(Object type, boolean matched, String message)` | Logs a chat message: `chat type=SPAM matched=true msg="..."`. |
+| `void` | `clearKnockout()` | Forgets the latest knock-out, so later lines show `ko+-`. |
+| `static String` | `describe(String name, int index, int id)` | Describes an NPC as the fixtures do: `Name#index(id=N)`. |
+| `void` | `despawn(String actor)` | Logs an NPC despawning: `despawn Bandit#28415(id=737)`. |
+| `void` | `hitsplat(String actor, int amount)` | Logs a hitsplat: `hitsplat player amount=4`. |
+| `void` | `interacting(String source, String target)` | Logs an interaction change: `interacting player -> Bandit#28415(id=737)`. |
+| `boolean` | `isEnabled()` | Returns whether debug logging is on. |
+| `void` | `knockout(String target, String interacting, int animation, int pose, int duration, int wakeTick)` | Logs a successful knock-out: `KNOCKOUT target=... |
+| `void` | `log(String format, Object... args)` | Logs a line whose message is `String.format(format, args)`. |
+| `void` | `overhead(String actor, String text)` | Logs an actor's overhead text: `overhead Bandit#28415(id=737) text="Zzzzzz"`. |
+| `void` | `setKnockoutTick(int tick)` | Records the tick of the latest knock-out, so later lines show `ko+` the ticks since it. |
+| `private void` | `write(String message)` |  |
+| `private static void` | `writeToLog(String line)` |  |
+
+### Field Detail
+
+#### NONE
+
+`static final String NONE`
+
+How a missing actor, such as an interaction target of `null`, is described in a line.
+
+#### PLAYER
+
+`static final String PLAYER`
+
+How the local player is described in a line.
+
+#### TAG
+
+`static final String TAG`
+
+The tag every line starts with.
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+#### knockedOut
+
+`private boolean knockedOut`
+
+#### knockoutTick
+
+`private int knockoutTick`
+
+#### sink
+
+`private final Consumer<String> sink`
+
+#### tickSupplier
+
+`private final IntSupplier tickSupplier`
+
+### Constructor Detail
+
+#### DebugLog
+
+`DebugLog(BetterBlackjackingConfig config, IntSupplier tickSupplier)`
+
+Creates a debug log that writes to the plugin's SLF4J logger at INFO.
+
+- **Parameter** `config` — the plugin config, whose `debugLogging()` turns logging on
+- **Parameter** `tickSupplier` — the current game tick
+
+#### DebugLog
+
+`DebugLog(BetterBlackjackingConfig config, IntSupplier tickSupplier, Consumer<String> sink)`
+
+Creates a debug log that writes each finished line to `sink`.
+
+- **Parameter** `config` — the plugin config, whose `debugLogging()` turns logging on
+- **Parameter** `tickSupplier` — the current game tick
+- **Parameter** `sink` — where finished lines go, tag included
+
+### Method Detail
+
+#### animation
+
+`void animation(String actor, int animation, int pose)`
+
+Logs an actor's animation change: `animation player anim=401 pose=808`.
+
+- **Parameter** `actor` — the actor, from `#describe` or `#PLAYER`
+- **Parameter** `animation` — the actor's animation ID, or -1 for none
+- **Parameter** `pose` — the actor's pose animation ID
+
+#### chat
+
+`void chat(Object type, boolean matched, String message)`
+
+Logs a chat message: `chat type=SPAM matched=true msg="..."`.
+
+- **Parameter** `type` — the chat message type, written with `toString()` (a `ChatMessageType`
+       writes its constant name)
+- **Parameter** `matched` — whether the message matched a signal the plugin reacts to
+- **Parameter** `message` — the message text, as received
+
+#### clearKnockout
+
+`void clearKnockout()`
+
+Forgets the latest knock-out, so later lines show `ko+-`.
+
+#### describe
+
+`static String describe(String name, int index, int id)`
+
+Describes an NPC as the fixtures do: `Name#index(id=N)`.
+
+- **Parameter** `name` — the NPC's name
+- **Parameter** `index` — the NPC's index in the client's NPC array
+- **Parameter** `id` — the NPC's ID
+- **Returns:** the description, e.g. `Bandit#28415(id=737)`
+
+#### despawn
+
+`void despawn(String actor)`
+
+Logs an NPC despawning: `despawn Bandit#28415(id=737)`.
+
+- **Parameter** `actor` — the NPC, from `#describe`
+
+#### hitsplat
+
+`void hitsplat(String actor, int amount)`
+
+Logs a hitsplat: `hitsplat player amount=4`.
+
+- **Parameter** `actor` — the actor hit, from `#describe` or `#PLAYER`
+- **Parameter** `amount` — the hitsplat's amount
+
+#### interacting
+
+`void interacting(String source, String target)`
+
+Logs an interaction change: `interacting player -> Bandit#28415(id=737)`.
+
+- **Parameter** `source` — the actor whose target changed, from `#describe` or `#PLAYER`
+- **Parameter** `target` — the new target, from `#describe`, `#PLAYER` or `#NONE`
+
+#### isEnabled
+
+`boolean isEnabled()`
+
+Returns whether debug logging is on.
+
+- **Returns:** the current value of the `debugLogging` setting
+
+#### knockout
+
+`void knockout(String target, String interacting, int animation, int pose, int duration, int wakeTick)`
+
+Logs a successful knock-out:
+`KNOCKOUT target=... (interacting=...) anim=838 pose=808 duration=4 wakeTick=296`.
+
+- **Parameter** `target` — the knocked-out NPC, from `#describe` or `#NONE`
+- **Parameter** `interacting` — what the player was interacting with, from `#describe` or
+       `#NONE`
+- **Parameter** `animation` — the target's animation ID, or -1 if there is no target
+- **Parameter** `pose` — the target's pose animation ID, or -1 if there is no target
+- **Parameter** `duration` — the knock-out duration in ticks
+- **Parameter** `wakeTick` — the tick the target is expected to wake on
+
+#### log
+
+`void log(String format, Object... args)`
+
+Logs a line whose message is `String.format(format, args)`. Does nothing, and formats
+nothing, when debug logging is off.
+
+- **Parameter** `format` — the message's format string
+- **Parameter** `args` — the format arguments
+
+#### overhead
+
+`void overhead(String actor, String text)`
+
+Logs an actor's overhead text: `overhead Bandit#28415(id=737) text="Zzzzzz"`.
+
+- **Parameter** `actor` — the actor, from `#describe` or `#PLAYER`
+- **Parameter** `text` — the overhead text
+
+#### setKnockoutTick
+
+`void setKnockoutTick(int tick)`
+
+Records the tick of the latest knock-out, so later lines show `ko+` the ticks since it.
+
+- **Parameter** `tick` — the game tick the knock-out succeeded on
+
+#### write
+
+`private void write(String message)`
+
+#### writeToLog
+
+`private static void writeToLog(String line)`
 
 ---
 
