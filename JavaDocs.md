@@ -21,6 +21,7 @@
 - [com.oveduumnakal.betterblackjacking.OutlineOverlay](#comoveduumnakalbetterblackjackingoutlineoverlay)
 - [com.oveduumnakal.betterblackjacking.PickpocketBudget](#comoveduumnakalbetterblackjackingpickpocketbudget)
 - [com.oveduumnakal.betterblackjacking.PickpocketIndicatorOverlay](#comoveduumnakalbetterblackjackingpickpocketindicatoroverlay)
+- [com.oveduumnakal.betterblackjacking.PluginStateView](#comoveduumnakalbetterblackjackingpluginstateview)
 - [com.oveduumnakal.betterblackjacking.Pollnivneach](#comoveduumnakalbetterblackjackingpollnivneach)
 - [com.oveduumnakal.betterblackjacking.SubTickClock](#comoveduumnakalbetterblackjackingsubtickclock)
 - [com.oveduumnakal.betterblackjacking.TargetState](#comoveduumnakalbetterblackjackingtargetstate)
@@ -577,8 +578,316 @@ Entry point of the Better Blackjacking plugin, which helps players blackjack in 
 
 <p>It outlines the target's click box in a colour that says what to do next, counts down to the
 next knock-out, times the two guaranteed pickpockets, and smooths the target's wake-up animation.
-This scaffold only registers the plugin with the client; the event wiring and overlays arrive in
-later changes.
+
+<p>The plugin translates RuneLite events into plain calls on the state in `PluginStateView`:
+the `KnockoutTracker`, the `ActivationGate`, the `SubTickClock` and the set of
+blackjack targets in the scene. The overlays read that state through `TargetStateView`. The
+tick every event is credited to is `Client#getTickCount()`.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `static final int` | `WAKE_WINDOW_TICKS` | How many ticks from the knock-out's wake tick the target's `HUMAN_READY` animation still counts as it waking (PLAN §5.5). |
+| `private static final int` | `WEAPON_SLOT` |  |
+| `private Client` | `client` |  |
+| `private ClientThread` | `clientThread` |  |
+| `private BetterBlackjackingConfig` | `config` |  |
+| `private DebugLog` | `debugLog` |  |
+| `private OutlineOverlay` | `outlineOverlay` |  |
+| `private OverlayManager` | `overlayManager` |  |
+| `private PickpocketIndicatorOverlay` | `pickpocketIndicatorOverlay` |  |
+| `private PluginStateView` | `state` |  |
+| `private TimerOverlay` | `timerOverlay` |  |
+| `private int` | `wakeNpcIndex` |  |
+| `private int` | `wakeTick` |  |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `public void` | `configure(Binder binder)` | Binds `TargetStateView` to the single `PluginStateView` the plugin updates, so the overlays draw the plugin's state. |
+| `private String` | `describe(Actor actor)` |  |
+| `private void` | `forgetWake()` |  |
+| `private NPC` | `localInteractingNpc()` |  |
+| `private WorldPoint` | `locationOf(Player player)` |  |
+| `private void` | `logKnockout(int tick, NPC interacting)` |  |
+| `public void` | `onAnimationChanged(AnimationChanged event)` | Feeds a target's animation to the tracker, and calls `#onTargetWoke(NPC)` when the last knocked-out target plays `HUMAN_READY` within `#WAKE_WINDOW_TICKS` of its wake tick. |
+| `public void` | `onChatMessage(ChatMessage event)` | Feeds game messages to the tracker, crediting them to the NPC the player is interacting with. |
+| `public void` | `onConfigChanged(ConfigChanged event)` | Applies a new knock-out duration. |
+| `public void` | `onGameStateChanged(GameStateChanged event)` | Clears everything on logout or hop, and re-reads the weapon and Thieving level on login. |
+| `public void` | `onGameTick(GameTick event)` | Advances the clock and the tracker, moves the gate to the player's location, and polls whether each target is interacting with the player, which keeps the ATTACKING exit rule current. |
+| `public void` | `onHitsplatApplied(HitsplatApplied event)` | Tells the tracker the player was hit, which makes every target interacting with them ATTACKING. |
+| `public void` | `onInteractingChanged(InteractingChanged event)` | Records whether a target is now interacting with the player. |
+| `public void` | `onItemContainerChanged(ItemContainerChanged event)` | Updates the gate's weapon when the equipment changes. |
+| `public void` | `onNpcDespawned(NpcDespawned event)` | Stops tracking an NPC that despawned and tells the tracker, which ends its knock-out. |
+| `public void` | `onNpcSpawned(NpcSpawned event)` | Starts tracking a blackjack target that spawned. |
+| `public void` | `onOverheadTextChanged(OverheadTextChanged event)` | Feeds a target's overhead text to the tracker. |
+| `public void` | `onStatChanged(StatChanged event)` | Updates the gate's boosted Thieving level. |
+| `void` | `onTargetWoke(NPC npc)` | Called once when the last knocked-out target plays `HUMAN_READY` (the game snapping it to standing) within `#WAKE_WINDOW_TICKS` ticks of its wake tick. |
+| `BetterBlackjackingConfig` | `provideConfig(ConfigManager configManager)` | Supplies the plugin config to Guice. |
+| `private void` | `readClientState()` |  |
+| `private void` | `readEquipmentAndLevel()` |  |
+| `private void` | `rememberKnockout()` |  |
+| `private void` | `resetState()` |  |
+| `protected void` | `shutDown()` | Removes the overlays and clears all state on the client thread. |
+| `protected void` | `startUp()` | Registers the overlays, sets the knock-out duration, and reads the player's equipment, Thieving level, location and the NPCs already in the scene on the client thread. |
+| `private NPC` | `trackedNpc(Actor actor)` |  |
+| `private void` | `updateGate(ActivationGate next)` |  |
+| `private static int` | `weaponIn(ItemContainer equipment)` |  |
+| `private int` | `wieldedWeapon()` |  |
+
+### Field Detail
+
+#### WAKE_WINDOW_TICKS
+
+`static final int WAKE_WINDOW_TICKS`
+
+How many ticks from the knock-out's wake tick the target's `HUMAN_READY` animation still
+counts as it waking (PLAN §5.5).
+
+#### WEAPON_SLOT
+
+`private static final int WEAPON_SLOT`
+
+#### client
+
+`private Client client`
+
+#### clientThread
+
+`private ClientThread clientThread`
+
+#### config
+
+`private BetterBlackjackingConfig config`
+
+#### debugLog
+
+`private DebugLog debugLog`
+
+#### outlineOverlay
+
+`private OutlineOverlay outlineOverlay`
+
+#### overlayManager
+
+`private OverlayManager overlayManager`
+
+#### pickpocketIndicatorOverlay
+
+`private PickpocketIndicatorOverlay pickpocketIndicatorOverlay`
+
+#### state
+
+`private PluginStateView state`
+
+#### timerOverlay
+
+`private TimerOverlay timerOverlay`
+
+#### wakeNpcIndex
+
+`private int wakeNpcIndex`
+
+#### wakeTick
+
+`private int wakeTick`
+
+### Method Detail
+
+#### configure
+
+`public void configure(Binder binder)`
+
+Binds `TargetStateView` to the single `PluginStateView` the plugin updates, so the
+overlays draw the plugin's state.
+
+- **Parameter** `binder` — the plugin's Guice binder
+
+#### describe
+
+`private String describe(Actor actor)`
+
+#### forgetWake
+
+`private void forgetWake()`
+
+#### localInteractingNpc
+
+`private NPC localInteractingNpc()`
+
+#### locationOf
+
+`private WorldPoint locationOf(Player player)`
+
+#### logKnockout
+
+`private void logKnockout(int tick, NPC interacting)`
+
+#### onAnimationChanged
+
+`public void onAnimationChanged(AnimationChanged event)`
+
+Feeds a target's animation to the tracker, and calls `#onTargetWoke(NPC)` when the last
+knocked-out target plays `HUMAN_READY` within `#WAKE_WINDOW_TICKS` of its wake tick.
+
+- **Parameter** `event` — the animation change
+
+#### onChatMessage
+
+`public void onChatMessage(ChatMessage event)`
+
+Feeds game messages to the tracker, crediting them to the NPC the player is interacting with.
+A knock-out success also records the knock-out tick in the debug log, after logging the chat
+line and before logging the knock-out line, as `DebugLog` requires.
+
+- **Parameter** `event` — the chat message
+
+#### onConfigChanged
+
+`public void onConfigChanged(ConfigChanged event)`
+
+Applies a new knock-out duration.
+
+- **Parameter** `event` — the config change
+
+#### onGameStateChanged
+
+`public void onGameStateChanged(GameStateChanged event)`
+
+Clears everything on logout or hop, and re-reads the weapon and Thieving level on login.
+
+- **Parameter** `event` — the game state change
+
+#### onGameTick
+
+`public void onGameTick(GameTick event)`
+
+Advances the clock and the tracker, moves the gate to the player's location, and polls whether
+each target is interacting with the player, which keeps the ATTACKING exit rule current.
+
+- **Parameter** `event` — the tick
+
+#### onHitsplatApplied
+
+`public void onHitsplatApplied(HitsplatApplied event)`
+
+Tells the tracker the player was hit, which makes every target interacting with them ATTACKING.
+
+- **Parameter** `event` — the hitsplat
+
+#### onInteractingChanged
+
+`public void onInteractingChanged(InteractingChanged event)`
+
+Records whether a target is now interacting with the player.
+
+- **Parameter** `event` — the interaction change
+
+#### onItemContainerChanged
+
+`public void onItemContainerChanged(ItemContainerChanged event)`
+
+Updates the gate's weapon when the equipment changes.
+
+- **Parameter** `event` — the container change
+
+#### onNpcDespawned
+
+`public void onNpcDespawned(NpcDespawned event)`
+
+Stops tracking an NPC that despawned and tells the tracker, which ends its knock-out.
+
+- **Parameter** `event` — the despawn
+
+#### onNpcSpawned
+
+`public void onNpcSpawned(NpcSpawned event)`
+
+Starts tracking a blackjack target that spawned.
+
+- **Parameter** `event` — the spawn
+
+#### onOverheadTextChanged
+
+`public void onOverheadTextChanged(OverheadTextChanged event)`
+
+Feeds a target's overhead text to the tracker.
+
+- **Parameter** `event` — the overhead text change
+
+#### onStatChanged
+
+`public void onStatChanged(StatChanged event)`
+
+Updates the gate's boosted Thieving level.
+
+- **Parameter** `event` — the stat change
+
+#### onTargetWoke
+
+`void onTargetWoke(NPC npc)`
+
+Called once when the last knocked-out target plays `HUMAN_READY` (the game snapping it to
+standing) within `#WAKE_WINDOW_TICKS` ticks of its wake tick. The wake-up animation
+(PLAN §5.5) replaces the animation here. It does nothing yet.
+
+- **Parameter** `npc` — the target that woke
+
+#### provideConfig
+
+`BetterBlackjackingConfig provideConfig(ConfigManager configManager)`
+
+Supplies the plugin config to Guice.
+
+- **Parameter** `configManager` — RuneLite's config manager
+- **Returns:** the config proxy
+
+#### readClientState
+
+`private void readClientState()`
+
+#### readEquipmentAndLevel
+
+`private void readEquipmentAndLevel()`
+
+#### rememberKnockout
+
+`private void rememberKnockout()`
+
+#### resetState
+
+`private void resetState()`
+
+#### shutDown
+
+`protected void shutDown()`
+
+Removes the overlays and clears all state on the client thread.
+
+#### startUp
+
+`protected void startUp()`
+
+Registers the overlays, sets the knock-out duration, and reads the player's equipment, Thieving
+level, location and the NPCs already in the scene on the client thread.
+
+#### trackedNpc
+
+`private NPC trackedNpc(Actor actor)`
+
+#### updateGate
+
+`private void updateGate(ActivationGate next)`
+
+#### weaponIn
+
+`private static int weaponIn(ItemContainer equipment)`
+
+#### wieldedWeapon
+
+`private int wieldedWeapon()`
 
 ---
 
@@ -2090,6 +2399,260 @@ clamped to [`#STOP_FONT_MIN`, `#STOP_FONT_MAX`] px.
 #### verticalGap
 
 `private static int verticalGap(int diameter)`
+
+---
+
+## com.oveduumnakal.betterblackjacking.PluginStateView
+
+_class_
+
+`class PluginStateView`
+
+The plugin's state, and the `TargetStateView` the overlays draw from.
+
+<p>It holds one `KnockoutTracker`, one `SubTickClock`, the current
+`ActivationGate` and every blackjack target in the scene. The plugin's event handlers update
+them; the overlays only read through `TargetStateView`. Guice binds it as a singleton, so
+the plugin and every overlay share one instance. Everything runs on the client thread.
+
+<p>`#eligibleTargets()` is called every frame, so the eligible targets are cached and the
+cache is rebuilt only after the gate or the set of targets changes.
+
+### Field Summary
+
+| Modifier and Type | Field | Description |
+|---|---|---|
+| `private final SubTickClock` | `clock` |  |
+| `private final BetterBlackjackingConfig` | `config` |  |
+| `private List<NPC>` | `eligible` |  |
+| `private ActivationGate` | `gate` |  |
+| `private final Set<NPC>` | `targets` |  |
+| `private final Collection<NPC>` | `targetsView` |  |
+| `private final KnockoutTracker` | `tracker` |  |
+
+### Constructor Summary
+
+| Constructor | Description |
+|---|---|
+| `PluginStateView(BetterBlackjackingConfig config)` | Creates the state with a clock that reads `System#nanoTime()`. |
+| `PluginStateView(BetterBlackjackingConfig config, SubTickClock clock)` | Creates the state with its own clock, so tests can control time. |
+
+### Method Summary
+
+| Modifier and Type | Method | Description |
+|---|---|---|
+| `boolean` | `addTarget(NPC npc)` | Starts tracking an NPC if it is a `BlackjackTarget`, whether or not it is eligible now. |
+| `void` | `clear()` | Forgets everything: the targets, the gate, the tracker's state and the clock. |
+| `SubTickClock` | `clock()` | The clock the plugin ticks on every `GameTick`. |
+| `public Color` | `colorOf(TargetState state)` | The configured colour for a state. |
+| `public long` | `durationMillis()` | The tracker's knock-out duration in milliseconds. |
+| `public Collection<NPC>` | `eligibleTargets()` | The tracked targets the gate says are eligible, from a cache rebuilt only after the gate or the target set changes. |
+| `ActivationGate` | `gate()` | The current activation gate. |
+| `public boolean` | `isActive()` | Whether the activation gate is open. |
+| `boolean` | `isTarget(NPC npc)` | Whether an NPC is a tracked blackjack target. |
+| `public int` | `pickpocketsLeft()` | The tracker's pickpockets left at its latest tick. |
+| `public long` | `remainingMillis()` | The time until the tracker's wake tick, interpolated by the clock. |
+| `boolean` | `removeTarget(NPC npc)` | Stops tracking an NPC. |
+| `boolean` | `setGate(ActivationGate next)` | Replaces the activation gate. |
+| `public TargetState` | `stateOf(NPC npc)` | The tracker's state for the NPC's index. |
+| `NPC` | `targetByIndex(int npcIndex)` | Finds a tracked target by its NPC index. |
+| `Collection<NPC>` | `targets()` | Every tracked blackjack target in the scene, eligible or not. |
+| `KnockoutTracker` | `tracker()` | The knock-out tracker the plugin feeds events into. |
+
+### Field Detail
+
+#### clock
+
+`private final SubTickClock clock`
+
+#### config
+
+`private final BetterBlackjackingConfig config`
+
+#### eligible
+
+`private List<NPC> eligible`
+
+#### gate
+
+`private ActivationGate gate`
+
+#### targets
+
+`private final Set<NPC> targets`
+
+#### targetsView
+
+`private final Collection<NPC> targetsView`
+
+#### tracker
+
+`private final KnockoutTracker tracker`
+
+### Constructor Detail
+
+#### PluginStateView
+
+`PluginStateView(BetterBlackjackingConfig config)`
+
+Creates the state with a clock that reads `System#nanoTime()`.
+
+- **Parameter** `config` — the plugin config, which gives the state colours
+
+#### PluginStateView
+
+`PluginStateView(BetterBlackjackingConfig config, SubTickClock clock)`
+
+Creates the state with its own clock, so tests can control time.
+
+- **Parameter** `config` — the plugin config, which gives the state colours
+- **Parameter** `clock` — the clock the countdown interpolates with
+
+### Method Detail
+
+#### addTarget
+
+`boolean addTarget(NPC npc)`
+
+Starts tracking an NPC if it is a `BlackjackTarget`, whether or not it is eligible now.
+
+- **Parameter** `npc` — the NPC that spawned or was found in the scene
+- **Returns:** `true` if the NPC is a target and wasn't tracked yet
+
+#### clear
+
+`void clear()`
+
+Forgets everything: the targets, the gate, the tracker's state and the clock. The tracker's
+knock-out duration is kept.
+
+#### clock
+
+`SubTickClock clock()`
+
+The clock the plugin ticks on every `GameTick`.
+
+- **Returns:** the clock
+
+#### colorOf
+
+`public Color colorOf(TargetState state)`
+
+The configured colour for a state.
+
+- **Parameter** `state` — a target state; `null` counts as `TargetState#KNOCK_OUT`
+- **Returns:** the colour
+
+#### durationMillis
+
+`public long durationMillis()`
+
+The tracker's knock-out duration in milliseconds.
+
+- **Returns:** `knockOutTicks × 600`
+
+#### eligibleTargets
+
+`public Collection<NPC> eligibleTargets()`
+
+The tracked targets the gate says are eligible, from a cache rebuilt only after the gate or
+the target set changes.
+
+- **Returns:** the eligible targets; empty while the plugin is inactive
+
+#### gate
+
+`ActivationGate gate()`
+
+The current activation gate.
+
+- **Returns:** the gate; `ActivationGate#CLOSED` before the plugin has read the player's state
+
+#### isActive
+
+`public boolean isActive()`
+
+Whether the activation gate is open.
+
+- **Returns:** whether the plugin is active
+
+#### isTarget
+
+`boolean isTarget(NPC npc)`
+
+Whether an NPC is a tracked blackjack target.
+
+- **Parameter** `npc` — the NPC
+- **Returns:** `true` if it is in the target set
+
+#### pickpocketsLeft
+
+`public int pickpocketsLeft()`
+
+The tracker's pickpockets left at its latest tick.
+
+- **Returns:** 0 to `KnockoutTracker#MAX_PICKPOCKETS`
+
+#### remainingMillis
+
+`public long remainingMillis()`
+
+The time until the tracker's wake tick, interpolated by the clock.
+
+- **Returns:** the time left in milliseconds; 0 when nothing is knocked out
+
+#### removeTarget
+
+`boolean removeTarget(NPC npc)`
+
+Stops tracking an NPC.
+
+- **Parameter** `npc` — the NPC that despawned
+- **Returns:** `true` if the NPC was tracked
+
+#### setGate
+
+`boolean setGate(ActivationGate next)`
+
+Replaces the activation gate. When this closes an open gate, the tracker is reset, since
+PLAN §4.2 clears everything when the gate closes.
+
+- **Parameter** `next` — the new gate
+- **Returns:** `true` if the gate went from active to inactive
+
+#### stateOf
+
+`public TargetState stateOf(NPC npc)`
+
+The tracker's state for the NPC's index.
+
+- **Parameter** `npc` — a target
+- **Returns:** its state; `TargetState#KNOCK_OUT` for `null`
+
+#### targetByIndex
+
+`NPC targetByIndex(int npcIndex)`
+
+Finds a tracked target by its NPC index.
+
+- **Parameter** `npcIndex` — the NPC index, as from `NPC#getIndex()`
+- **Returns:** the target, or `null` if no tracked target has that index
+
+#### targets
+
+`Collection<NPC> targets()`
+
+Every tracked blackjack target in the scene, eligible or not.
+
+- **Returns:** an unmodifiable live view of the targets
+
+#### tracker
+
+`KnockoutTracker tracker()`
+
+The knock-out tracker the plugin feeds events into.
+
+- **Returns:** the tracker
 
 ---
 
