@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+	id 'application'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'com.github.javaparser:javaparser-core:3.26.2'
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+application {
+	mainClass = 'docs.JavaDocsCli'
+}
+
+/*
+ * This standalone build hosts the JavaDocs.md generator and freshness gate. It is kept out of
+ * the plugin's root build (no buildSrc, no includeBuild) so its third-party javaparser
+ * dependency never enters the build the RuneLite plugin-hub compiles under dependency
+ * verification. The plugin sources and JavaDocs.md live one directory up.
+ */
+def repoRoot = layout.projectDirectory.dir('..')
+def sourceRoot = repoRoot.dir('src/main/java')
+def outputFile = repoRoot.file('JavaDocs.md')
+
+tasks.register('generateJavaDocs', JavaExec) {
+	group = 'documentation'
+	description = 'Generates ../JavaDocs.md from the plugin source Javadoc.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'docs.JavaDocsCli'
+	args 'generate', sourceRoot.asFile.absolutePath, outputFile.asFile.absolutePath
+}
+
+tasks.register('checkJavaDocs', JavaExec) {
+	group = 'verification'
+	description = 'Fails if ../JavaDocs.md is stale or a public/protected member lacks Javadoc.'
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = 'docs.JavaDocsCli'
+	def checkArgs = ['check', sourceRoot.asFile.absolutePath, outputFile.asFile.absolutePath]
+	if (project.hasProperty('excludeOverrideDocs')) {
+		checkArgs << '--exclude-overrides'
+	}
+	args checkArgs
+}
